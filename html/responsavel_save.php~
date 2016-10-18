@@ -1,0 +1,53 @@
+<?php
+
+	include ("../../dao/Conexao.class.php");
+	include ("../../dao/ResponsavelDAO.class.php");
+	
+	
+
+	$id = $_POST['id'];
+	$nome = $_POST['nome'];
+	$cpf = $_POST['cpf'];
+	$nome = $_POST['email'];
+	$id = $_POST['telefone1'];
+	$nome = $_POST['telefone2'];
+	$id = $_POST['telefone3'];
+	$nome = $_POST['senha'];
+
+	
+
+	if ((!isset($_POST['id'])) || ($_POST['id'] == '')){
+		$sql = "insert into setor (
+					nome) 
+				values (
+					'$nome')";
+
+		if (pg_query($conect, $sql)) {
+			$response = array("success" => true);
+		}
+	
+		else{
+			$response = array("success" => false);
+		}
+	}
+
+	else{
+
+		$id = $_POST['id'];
+		$sql = "update setor set 
+					nome = '$nome'
+				where 
+					idsetor = $id";
+
+		if (pg_query($conect, $sql)) {
+			$response = array("success" => true);
+		}
+	
+		else{
+			$response = array("success" => false);
+		}
+	}
+
+	echo json_encode($response);
+
+?>
