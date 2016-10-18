@@ -4,11 +4,10 @@
 class Comentario
 {
 
-  private $id;
-  private $id_projeto_pessoa_tarefa;
+  private $id_comentario;
+  private $id_ocorrencia;
   private $id_usuario;
-  private $nome_usuario;
-  private $data;
+  private $data_cadastro;
   private $comentario;
 
   public function __construct() { }
