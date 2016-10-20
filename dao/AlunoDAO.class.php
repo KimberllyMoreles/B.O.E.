@@ -36,7 +36,6 @@ class AlunoDAO {
         ':cpf' => $obj->cpf,
         'nome' => $obj->nome,
         ':matricula' => $obj->matricula,
-        ':senha' => $obj->senha,
         ':curso' => $obj->curso,
         ':responsavel1' => $obj->responsavel1,
         ':responsavel2' => $obj->responsavel2,
@@ -44,7 +43,7 @@ class AlunoDAO {
         );
     
         //prepara o sql
-        $sql = "INSERT INTO aluno(cpf, nome, matricula, senha, id_curso, id_responsavel1, id_responsavel2, data_nasc) VALUES(:cpf, :nome, :matricula, :senha, :curso, :responsavel1, :responsavel2, :data_nasc)";
+        $sql = "INSERT INTO aluno(cpf, nome, matricula, id_curso, id_responsavel1, id_responsavel2, data_nasc) VALUES(:cpf, :nome, :matricula, :curso, :responsavel1, :responsavel2, :data_nasc)";
         $retorno = $this->pdo->prepare($sql);
         $retorno->execute($parametros);
                   
@@ -71,7 +70,6 @@ class AlunoDAO {
          ':cpf' => $obj->cpf,
         'nome' => $obj->nome,
         ':matricula' => $obj->matricula,
-        'senha' => $obj->senha,
         ':id_curso' => $obj->curso, 
         ':id_responsavel1' => $obj->responsavel1,
         ':id_responsavel2' => $obj->responsavel2,
@@ -82,7 +80,6 @@ class AlunoDAO {
                 . "cpf = :cpf, "
                 . "nome= :nome,"
                 . "matricula= :matricula"
-                . "senha= :senha,"
                 . "curso= :curso"
                 . "responsavel1= :responsavel1,"
                 . "responsavel2= :responsavel2,"                
@@ -94,17 +91,19 @@ class AlunoDAO {
         return $retorno->rowCount();
     }
     
-    public function buscarChavePrimaria($chaveprimaria)
+   public function buscarChavePrimaria($chaveprimaria)
     {
         $sql = "SELECT * FROM aluno WHERE id_aluno = :id_aluno";
         $retorno = $this->pdo->prepare($sql);
         $retorno->bindParam(":id_aluno",$chaveprimaria);
         $retorno->execute();
         
-        if($obj = $retorno->fetchObject()){
+        if($obj = $retorno->fetchObject())
+        {
             return $obj;
         }
-        else{
+        else
+        {
             return null;
         }
          
@@ -113,17 +112,18 @@ class AlunoDAO {
     //função que realiza a busca de alunos relacionados a determinado responsável
     public function buscarAlunoPorResponsavel($chaveprimaria)
     {
-        $sql = "SELECT * FROM aluno WHERE id_responsavel1 = :id_responsavel OR id_responsavel2 = id_responsavel";
-        $retorno = $this->pdo->prepare($sql);
-        $retorno->bindParam(":id_responsavel",$chaveprimaria);
-        $retorno->execute();
+       $parametros = Array();
+        $sql = "SELECT * FROM aluno WHERE id_responsavel1 = $chaveprimaria OR id_responsavel2 = $chaveprimaria";
+        $lista = array();
+        $query = $this->pdo->prepare($sql);
         
-        if($obj = $retorno->fetchObject()){
-            return $obj;
+        $query->execute($parametros);
+        //percorrer meus registros
+        //tratando-os como objeto
+        while($obj = $query->fetchObject()){
+            $lista[] = $obj;
         }
-        else{
-            return null;
-        }
+          return $lista;
          
     }
 }

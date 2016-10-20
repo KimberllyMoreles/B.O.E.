@@ -6,7 +6,6 @@ class Aluno {
     private $nome;
     private $matricula;
     private $status;
-    private $senha;
     private $curso;
     private $responsavel1;
     private $responsavel2;

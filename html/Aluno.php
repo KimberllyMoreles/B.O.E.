@@ -6,17 +6,14 @@
 	
 	$dao = new AlunoDAO();
 	$daoG = new ResponsavelDAO();
-	
-	$hoje = Date('d/m/y H:i:s');
 
-		if(isset($_POST["txtFiltro"])){
-			$lista = $dao->listar($_POST["txtFiltro"]); 
-	     	}     	
-	     	else{
-			$lista = $dao->listar(); 
-	     	}
+	if(isset($_POST["txtFiltro"])){
+		$lista = $dao->listar($_POST["txtFiltro"]); 
+     	}     	
+     	else{
+		$lista = $dao->listar(); 
+     	}
      		
-     	
 	$gLista = $daoG -> listar();
 	
 	if (isset($_GET['acao'])=='excluir'){
@@ -35,7 +32,6 @@
 		$aluno -> cpf = $_POST["cpf"];
 		$aluno -> matricula = $_POST["matricula"];
 		//colocar opção para listar inativos
-		$aluno -> senha = $_POST["senha"];
 		$aluno -> curso = $_POST["curso"];
 		$aluno -> responsavel1 = $_POST["responsavel1"];
 		$aluno -> responsavel2 = $_POST["responsavel2"];	
@@ -87,7 +83,6 @@
 					$("input[name=curso]").val("");
 					$("input[name=responsavel1]").val("");  
 					$("input[name=responsavel2]").val("");  
-					$("input[name=senha]").val("");
 					$("input[name=data_nasc]").val("");
 				</script>';
 			
@@ -101,7 +96,28 @@
 ?>
 
 	<script type="text/javascript" language="javascript">	
-		   
+		 
+		function fillForm(valor){		
+			if (valor != null) {
+				$.ajax({
+					type: 'POST',
+					dataType: 'json',
+					url: 'aluno_busca.php',
+					async: true,
+					data: { id: valor},
+					success: function(response) {
+						$("input[name=id]").val(valor);
+						$("input[name=nome]").val(response.nome);	
+						$("input[name=cpf").val(response.cpf);
+						$("input[name=matricula]").val(response.matricula);
+						$("select[name=curso]").val(response.id_curso);  
+						$("input[name=responsavel1]").val(response.responsavel1);    
+						$("input[name=responsavel2]").val(response.responsavel2);                
+					}
+				});				
+			}
+		}			
+		  
 		function TestaCPF(strCPF) {
 		    var Soma;
 		    var Resto;
@@ -119,32 +135,9 @@
 		    Resto = (Soma * 10) % 11;
 	
 		    if ((Resto == 10) || (Resto == 11))  Resto = 0;
+
 		    if (Resto != parseInt(strCPF.substring(10, 11) ) ) return false;
 		    return true;
-		}		
-		
-		function fillForm(valor){		
-			if (valor != null) {
-				$.ajax({
-					type: 'POST',
-					dataType: 'json',
-					url: 'aluno_busca.php',
-					async: true,
-					data: { id: valor},
-					success: function(response) {
-						$("input[name=id]").val(valor);
-						$("input[name=nome]").val(response.nome);	
-						$("input[name=cpf").val(response.cpf);
-						$("input[name=matricula]").val(response.matricula);
-						$("select[name=curso]").val(response.id_curso);
-						$("input[name=responsavel1]").val(response.responsavel1);    
-						$("input[name=responsavel2]").val(response.responsavel2); 						
-						$("input[name=data_nasc]").val(response.data_nasc);
-						$("input[name=senha]").prop('disabled', true);       
-						$("input[name=senha1]").prop('disabled', true);                    
-					}
-				});				
-			}
 		}		
 		
 		function valida(){
@@ -190,18 +183,7 @@
 					return (false)
 				}				
 			}	
-					
-			if (formulario.senha.value != "" || formulario.senha1.value != ""){
-				if (formulario.senha.value == "" || formulario.senha1.value == ""){
-					var str1 = document.getElementById('senha');
-					var str2 = document.getElementById('senha1')
-					if(str1 !=== str2){
-						//verificar se senha do segundo campo é a mesma do primeiro
-						alert("Preencha ambos os campos de senha com o mesmo valor")
-						return (false)
-					}
-				}
-			}						
+									
 			formulario.submit();
 		}		
 	</script>
@@ -307,7 +289,7 @@
                 <div class="modal-dialog modal-lg">
                     <div class="modal-content">
                        <h2><p style="text-align: center; font-weight: bold;">Cadastro de Alunos</p></h2>
-                        <form role="form" action="Aluno.php?salvar=true" method="POST" name='formulario' onSubmit="return valida()">
+                         <form role="form" action="Aluno.php?salvar=true" method="POST" name='formulario' onSubmit="return valida()">
                              <input type="hidden" id="id" name="id">
                              <div class="form-group row" style="margin-left: 25px;">
                                 <div class="col-lg-3">

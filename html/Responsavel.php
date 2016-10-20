@@ -122,7 +122,7 @@
 		    return true;
 		}
 			
-		function fillForm(valor){		
+		function fillForm(valor){
 			if (valor != null) {
 				$.ajax({
 					type: 'POST',
@@ -140,11 +140,25 @@
 						$("input[name=telefone3]").val(response.telefone3);
 						$("input[name=senha]").prop('disabled', true);       
 						$("input[name=senha1]").prop('disabled', true);
+						
 					}
 				});
-							
+				$.ajax({
+					type: 'POST',
+					dataType: 'json',
+					url: 'responsavel_busca_aluno.php',
+					async: true,
+					data: { id: valor},
+					success: function(response) {
+						for(var i=0; i < response.length; i++){						
+							//Adicionando registros retornados no label									
+							$('#filhos').append('<span class="label label-primary">' + response[i].nome + '</span>');							
+						}
+					}
+				});				
 			}
-		}		
+		}	
+			
 		function valida(){
 			if (formulario.nome.value == ""){
 					alert("Digite o nome")
@@ -322,14 +336,7 @@
                                 </div>
                             </div>
                             <div>
-                                <label style="margin-left: 40px;">Filhos(as):
-                                <?php 
-                                
-                                $listaAluno = $daoAluno -> listar($id_responsavel);
-                                foreach($lista as $obj){ echo'
-                                <span class="label label-primary">';
-                                	$nomeAlu = $obj -> nome; echo '
-                                </span> </label>'; } ?>
+                                <label style="margin-left: 40px;" id="filhos" name="filhos">Filhos(as):</label>
                             </div>
                             <div style="margin-left: 80%; margin-bottom: 25px;">
                                 <button type="submit" class="glyphicon glyphicon-check botao1 btn btn-primary" name="inserir" data-toggle="modal" data-target=".bd-example-modal-lg" id="salvar"> Salvar</button>
