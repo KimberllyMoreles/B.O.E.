@@ -1,5 +1,7 @@
 <?php 
 	include "index.php";
+	
+	$hoje = Date("d/m/y");
 ?>
 
 		<div>
@@ -20,16 +22,21 @@
                 	<div class="form-group row" style="margin-left: 15px;">
 	                    <div class="col-lg-1">
 	                        <label>Código</label>
-	                        <input style="width: 70px;" class="form-control" placeholder="150">
+	                        <input style="width: 70px;" class="form-control" placeholder="150" disabled>
 	                    </div>
 	                    <div class="col-lg-2">
 	                        <label>Data de cadastro</label>
-	                        <input style="width: 150px;" class="form-control" placeholder="28/09/2016" maxlength="14">
+	                        <input style="width: 150px;" class="form-control" placeholder="28/09/2016" maxlength="14" value=<?php echo $hoje?>>
 	                    </div>
 	                    <div class="col-lg-3">
 	                    	<label>Tipo de Ocorrência</label>
 	                    	<select class="form-control" name="" id="">
-	                    		<option value="">Conversa com turma</option>
+		                    	<option value=""></option>
+	                    		<option value="1">Di&aacute;logo com turma</option>
+	                    		<option value="1">Di&aacute;logo com aluno</option>
+	                    		<option value="1">Di&aacute;logo com respons&aacute;vel</option>
+	                    		<option value="1">Di&aacute;logo com professor</option>
+	                    		<option value="1">Ocorr&ecirc;ncia</option>
 	                    	</select>
 	                    </div>
 	                </div>

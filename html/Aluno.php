@@ -96,7 +96,6 @@
 ?>
 
 	<script type="text/javascript" language="javascript">	
-		 
 		function fillForm(valor){		
 			if (valor != null) {
 				$.ajax({
@@ -177,8 +176,10 @@
 				var str1 = document.getElementById('responsavel1').value;
 				var str2 = document.getElementById('responsavel2').value;
 				var n = str1.localeCompare(str2); 
-				if(n != 0){
+				if(n == 0){
 					//verificar se senha do segundo campo é a mesma do primeiro
+					alert(str1);
+					alert(str2);
 					alert("Os responsaveis estão iguais, insira outro responsavel ou deixe o campo vazio")
 					return (false)
 				}				
@@ -333,25 +334,11 @@
                                 <div class="col-lg-3" style="margin-left:20px">
                                     <!-- Tratar autocomplete-->
                                     <label>Responsavel 1</label>
-					<select id="responsavel1" name="responsavel1" class="grid_5">
-						<option value="">Escolha um responsável:</option><?php							
-						foreach($gLista as $objg){
-							$id_responsavel = $objg -> id_responsavel;
-							$nomeg = $objg -> nome;							
-							echo "<option value='$id_responsavel' >$nomeg</option>";	
-						}?>									
-					</select><br/><br/>
+                                    <input style="width: 210px;" class="form-control" id="responsavel1" name="responsavel1">
                                 </div>
                                 <div class="col-lg-3" style="margin-left:20px">
                                      <label>Responsavel 2</label>
-					<select id="responsavel2" name="responsavel2" class="grid_5">
-						<option value="">Escolha um responsável:</option><?php							
-						foreach($gLista as $objg){
-							$id_responsavel = $objg -> id_responsavel;
-							$nomeg = $objg -> nome;							
-							echo "<option value='$id_responsavel' >$nomeg</option>";	
-						}?>									
-					</select><br/><br/>
+                                     <input style="width: 210px;" class="form-control" id="responsavel2" name="responsavel2">
                                 </div>
                             </div>
                         	<div class="form-group row" style="margin-left: 25px;">
