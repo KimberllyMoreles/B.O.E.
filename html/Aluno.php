@@ -1,5 +1,5 @@
 <?php
-	include 'index.php';
+	include 'index2.php';
 	require '../model/Aluno.class.php';
 	require '../dao/AlunoDAO.class.php';	
 	require '../dao/ResponsavelDAO.class.php';
@@ -308,30 +308,29 @@
                             </div>
                             <div class="form-group row" style="margin-left: 25px;">
                                 <div class="col-lg-3">
-					<tr>
-						<td>
-							Data de Nascimento</br>
-							<input type='text' id='data_nasc' name='data_nasc' size='20'>
-							<input type="reset" id="bt_inicio" value=" ... ">
+                                    <label>Data de Nascimento</label>
+                                    <input type="text" style="width: 210px;" class="form-control" id="data_nasc" name="data_nasc">
+                                </div>
+                                <div class="col-lg-1">
+                                	<label></label><br>
+                                	<input type="reset" id="bt_inicio" value=" ... " style="margin-top: 10px">
 
-							<script type="text/javascript">
-								Calendar.setup({
-									inputField	 :	"data_nasc",
-									ifFormat	   :	"%d/%m/%Y",
-									showsTime	  :	true,
-									button		 :	"bt_inicio",
-									singleClick	:	true,
-									step		   :	1,
-									disableFunc: function(date) {
-										var now= new Date();
-										return (date.getTime() > now.getTime());
-									}
-								});
-							</script>			
-						</td>
-					</tr>
+									<script type="text/javascript">
+										Calendar.setup({
+											inputField	 :	"data_nasc",
+											ifFormat	   :	"%d/%m/%Y",
+											showsTime	  :	true,
+											button		 :	"bt_inicio",
+											singleClick	:	true,
+											step		   :	1,
+											disableFunc: function(date) {
+												var now= new Date();
+												return (date.getTime() > now.getTime());
+											}
+										});
+									</script>		
                                 </div>                                
-                                <div class="col-lg-3" style="margin-left:20px">
+                                <div class="col-lg-3" style="margin-left:5px">
                                     <!-- Tratar autocomplete-->
                                     <label>Responsavel 1</label>
                                     <input style="width: 210px;" class="form-control" id="responsavel1" name="responsavel1">
@@ -344,24 +343,22 @@
                         	<div class="form-group row" style="margin-left: 25px;">
 	                        	<div class="col-lg-4">
 		                            <label>Curso</label>
-						<select name='curso'>
-							<option value="">Selecione o curso: </option>
-							<option value="1">Técnico em Agropecuária</option>
-							<option value="2">Técnico em Agroindustria</option>
-							<option value="3">Técnico em Informática</option>
-							<option value="4">Técnico em Informática para Internet</option>						
-							<option value="5">TADS</option>
-						</select> 
+									<select name='curso'>
+										<option value="">Selecione o curso: </option>
+										<option value="1">Técnico em Agropecuária</option>
+										<option value="2">Técnico em Agroindustria</option>
+										<option value="3">Técnico em Informática</option>
+										<option value="4">Técnico em Informática para Internet</option>						
+										<option value="5">TADS</option>
+									</select> 
 		                        </div>
-		                        <div class="col-lg-3" style="margin-left:15px">
-		                            <label>Senha</label>
-		                            <input type="password" style="width: 150px;" class="form-control" placeholder="********" id="senha" name="senha">
-		                        </div>
-		                        <div class="col-lg-3" style="margin-left:12px">
-		                            <label>Repetir a Senha</label>
-		                            <input type="password" style="width: 150px;" class="form-control" placeholder="********" id="senha1" name="senha1">
-                                </div>
                             </div>
+                            <div class="form-group row" style="margin-left: 15px;">
+		                    	<div class="col-lg-4">
+		                    		<label>Observação</label>
+		                    		<textarea rows="6" cols="110" style="border-radius:10px" placeholder="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."></textarea>
+			                    </div><br>
+		                    </div>
                             <div style="margin-left: 80%; margin-bottom: 25px;">
                                 <button type="submit" class="glyphicon glyphicon-check botao1 btn btn-primary" name="inserir" data-toggle="modal" data-target=".bd-example-modal-lg" id='salvar'> Salvar</button>
                             </div>                          

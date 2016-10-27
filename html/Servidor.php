@@ -1,5 +1,5 @@
 <?php
-	include 'index.php';
+	include 'index2.php';
 	require '../model/Servidor.class.php';
 	require '../dao/ServidorDAO.class.php';
 	

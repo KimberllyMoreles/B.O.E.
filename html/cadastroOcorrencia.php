@@ -1,5 +1,5 @@
 <?php 
-	include "index.php";
+	include "index2.php";
 	
 	$hoje = Date("d/m/y");
 ?>
@@ -73,6 +73,12 @@
                     <div class="form-group row" style="margin-left: 15px;">
                     	<div class="col-lg-4">
                     		<label>Interação</label>
+                            <div class='row' style="margin-left: 0px;">
+                                <input type='radio' name='tipo' id='publico'>
+                                <label for='publico'>Público</label>
+                                <input type='radio' name='tipo' id='privado'>
+                                <label for='privado'>Privado</label>
+                            </div>
                     		<textarea rows="6" cols="140" style="border-radius:10px" placeholder="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."></textarea>
 	                    </div><br>
                     </div>

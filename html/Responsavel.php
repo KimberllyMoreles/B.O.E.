@@ -1,5 +1,5 @@
 <?php
-	include 'index.php';
+	include 'index2.php';
 	require '../model/Responsavel.class.php';
 	require '../dao/ResponsavelDAO.class.php';
 	require '../dao/AlunoDAO.class.php';
@@ -323,16 +323,6 @@
                                 <div class="col-lg-2" style="margin-left:20px">
                                     <label>Telefone 3</label>
                                     <input type="text" style="width: 210px;" class="form-control" placeholder="5312341234" id="telefone3" name="telefone3" onkeypress='return SomenteNumero(event)'>
-                                </div>
-                            </div>
-                            <div class="form-group row">
-                                <div class="col-lg-4" style="margin-left:40px">
-                                    <label>Senha</label>
-                                    <input type="password" style="width: 210px;" class="form-control" placeholder="********" id="senha" name="senha">
-                                </div>
-                                <div class="col-lg-4" style="margin-left:20px">
-                                    <label>Repetir senha</label>
-                                    <input type="password" style="width: 210px;" class="form-control" placeholder="********" id="senha1" name="senha1">
                                 </div>
                             </div>
                             <div>
