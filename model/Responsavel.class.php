@@ -2,14 +2,13 @@
 
 class Responsavel{
     
-    private $id;
+    private $id_responsavel;
     private $nome;
     private $cpf;
     private $email;
     private $telefone1;
     private $telefone2;
     private $telefone3;
-    private $senha;
        
     public function __get($key){
         return $this->$key;

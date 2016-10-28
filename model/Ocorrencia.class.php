@@ -2,7 +2,6 @@
 
 class Ocorrencia {
 	private $id_ocorrencia;
-	private $id_aluno;
 	private $id_solicitante;
 	private $id_autuador;
 	private $data_cadastro;

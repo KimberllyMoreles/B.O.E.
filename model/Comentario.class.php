@@ -7,8 +7,10 @@ class Comentario
   private $id_comentario;
   private $id_ocorrencia;
   private $id_usuario;
+  private $tipo_usuario;
   private $data_cadastro;
   private $comentario;
+  private $tipo_comentario;
 
   public function __construct() { }
 
