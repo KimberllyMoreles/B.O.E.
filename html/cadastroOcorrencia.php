@@ -4,6 +4,30 @@
 	$hoje = Date("d/m/y");
 ?>
 
+	<script type="text/javascript" language="javascript">	
+			$(function() {
+				//autocomplete
+				$("#solicitante").autocomplete({
+					source: "cadastroOcorrencia_solicitante_autocomplete.php",
+					minLength: 1,
+					select: function( event, ui ) {
+						$("#id_solicitante").val(ui.item.id_solicitante);
+					}
+				});	
+			});
+			
+			$(function() {
+			//autocomplete
+				$("#aluno").autocomplete({
+					source: "cadastroOcorrencia_aluno_autocomplete.php",
+					minLength: 1,
+					select: function( event, ui ) {
+						$("#id_aluno").val(ui.item.id_aluno);
+					}
+				});	
+			});
+	</script>
+
 		<div>
 			<div class="container-fluid">
 				<!-- Page Heading -->
@@ -47,13 +71,15 @@
 	                    </div>
 	                    <div class="col-lg-3">
 	                        <label>Solicitante</label>
-	                        <input style="width: 245px;" class="form-control" maxlength="14">
+	                        <input style="width: 245px;" class="form-control" maxlength="14" id='solicitante' name='solicitante'>
+	                        <input name="id_solicitante" type="hidden" id="id_solicitante" value="" size="20"  />
 	                    </div>
 	                </div>
 	                <div class="form-group row" style="margin-left: 15px;">
                     	<div class="col-lg-3">
 	                        <label>Aluno envolvido</label>
-	                        <input style="width: 240px;" class="form-control" placeholder="Aluno envolvido na ocorrência">
+	                        <input style="width: 240px;" class="form-control" placeholder="Aluno envolvido na ocorrência" id='aluno' name='aluno'>
+	                        <input name="id_aluno" type="hidden" id="id_aluno" value="" size="20"  />
 	                    </div>
 	                    <div class="col-lg-3">
 	                        <button class="glyphicon glyphicon-plus btn btn-primary" style="margin-top:23px"></button>

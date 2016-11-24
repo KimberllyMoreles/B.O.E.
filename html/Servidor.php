@@ -164,8 +164,10 @@
 						
 			if (formulario.senha.value != "" || formulario.senha2.value != ""){
 				//verificar se senha do segundo campo é a mesma do primeiro
-				alert("Preencha ambos os campos de senha com o mesmo valor")
-				return (false)
+				if (formulario.senha.value != formulario.senha2.value){
+					alert("Preencha ambos os campos de senha com o mesmo valor")				
+					return (false)
+				}
 			}						
 			formulario.submit();
 		}		

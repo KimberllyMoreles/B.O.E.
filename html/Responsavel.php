@@ -2,10 +2,8 @@
 	include 'index2.php';
 	require '../model/Responsavel.class.php';
 	require '../dao/ResponsavelDAO.class.php';
-	require '../dao/AlunoDAO.class.php';
 	
 	$dao = new ResponsavelDAO();
-	$daoAluno = new AlunoDAO();
 		
 	if(isset($_POST["txtFiltro"])){
         	$lista = $dao->listar($_POST["txtFiltro"]); 
@@ -34,7 +32,6 @@
 		$responsavel -> telefone1 = $_POST["telefone1"];
 		$responsavel -> telefone2 = $_POST["telefone2"];
 		$responsavel -> telefone3 = $_POST["telefone3"];
-		$responsavel -> senha = $_POST["senha"];
 
 		//Chamo a DAO e mando inserir
 

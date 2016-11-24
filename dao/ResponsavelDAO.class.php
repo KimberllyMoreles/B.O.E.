@@ -16,12 +16,11 @@ class ResponsavelDAO {
             ':email'=> $obj->email,
             ':telefone1'=> $obj->telefone1,
             ':telefone2'=> $obj->telefone2,
-            ':telefone3'=> $obj->telefone3,    
-            ':senha'=> $obj->senha
+            ':telefone3'=> $obj->telefone3
         );
  
-        $sql = "INSERT INTO responsavel (nome, cpf, email, telefone1, telefone2, telefone3, senha)"
-                . "VALUES (:nome, :cpf, :email, :telefone1, :telefone2, :telefone3, :senha)";
+        $sql = "INSERT INTO responsavel (nome, cpf, email, telefone1, telefone2, telefone3)"
+                . "VALUES (:nome, :cpf, :email, :telefone1, :telefone2, :telefone3)";
         $retorno = $this->pdo->prepare($sql);
         $retorno->execute($parametros);
         
@@ -45,8 +44,7 @@ class ResponsavelDAO {
             ':email'=> $obj->email,
             ':telefone1'=> $obj->telefone1,
             ':telefone2'=> $obj->telefone2,
-            ':telefone3'=> $obj->telefone3,    
-            ':senha'=> $obj->senha
+            ':telefone3'=> $obj->telefone3
         );
         
         $sql = "UPDATE responsavel SET "
@@ -55,8 +53,7 @@ class ResponsavelDAO {
                 . "email = :email, "
                 . "telefone1 = :telefone1, "
                 . "telefone2 = :telefone2, "
-                . "telefone3 = :telefone3, "
-                . "senha = :senha "
+                . "telefone3 = :telefone3 "
                 . " WHERE id_responsavel = :id ";
         $retorno = $this->pdo->prepare($sql);
         $retorno->execute($parametros);
@@ -95,6 +92,27 @@ class ResponsavelDAO {
         }
         
         return $lista;
+    }
+    
+    public function listarResponsavelAutocomplete($filtro){
+        $parametros = array();
+        $sql = "SELECT id_responsavel, nome FROM responsavel WHERE status <> 2 AND nome ilike :filtro ";
+        $parametros[":filtro"] = "%".$filtro."%";
+     
+        $query = $this->pdo->prepare($sql);
+        
+        $query->execute($parametros);
+        $json = Array();
+        while ($obj = $query->fetchObject()){
+		array_push($json, 
+			Array(
+				"label" => $obj->nome, 				
+				"id_responsavel" =>$obj->id_responsavel
+			)
+		);
+        }
+       
+        return $json;
     }
 }
 

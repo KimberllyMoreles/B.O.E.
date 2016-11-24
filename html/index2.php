@@ -16,10 +16,7 @@
 	<script type="text/javascript" language="javascript" src="js/DataTable/jquery.dataTables.js"></script>	
 	<script type="text/javascript" language="javascript" src="js/DataTable/jquery.dataTables.min.js"></script>	
 	
-	<!-- autocomplete Javascript -->
-	<script src="autocomplete/js/autocomplete-min.js"></script>
-	<!-- autocomplete CSS -->
-	<link href="autocomplete/css/autocomplete-min.css" rel="stylesheet" />	
+	 
 	
 	<!-- calendar stylesheet -->
 	<link rel="stylesheet" type="text/css" media="all" href="js/jscalendar-1.0/skins/aqua/theme.css" title="win2k-cold-1" />
@@ -132,13 +129,15 @@
 	.margemTable{
 		margin-top: 25px;
 	}
-
+	
 	body{
 		background-color: #CCCCCC;
 	}
 
 </style>
-
+<script type="text/javascript" src="js/jquery-1.9.1.min.js"></script>
+	<script type="text/javascript" src="js/jquery-ui.min.js"></script>	
+    	<link rel="stylesheet" href="css/jquery-ui.min.css" type="text/css" /> 
 </head>
 
 

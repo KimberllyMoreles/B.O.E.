@@ -2,10 +2,8 @@
 	include 'index2.php';
 	require '../model/Aluno.class.php';
 	require '../dao/AlunoDAO.class.php';	
-	require '../dao/ResponsavelDAO.class.php';
 	
 	$dao = new AlunoDAO();
-	$daoG = new ResponsavelDAO();
 
 	if(isset($_POST["txtFiltro"])){
 		$lista = $dao->listar($_POST["txtFiltro"]); 
@@ -14,7 +12,6 @@
 		$lista = $dao->listar(); 
      	}
      		
-	$gLista = $daoG -> listar();
 	
 	if (isset($_GET['acao'])=='excluir'){
 		$dao = new AlunoDAO();
@@ -33,13 +30,25 @@
 		$aluno -> matricula = $_POST["matricula"];
 		//colocar opção para listar inativos
 		$aluno -> curso = $_POST["curso"];
-		$aluno -> responsavel1 = $_POST["responsavel1"];
-		$aluno -> responsavel2 = $_POST["responsavel2"];	
 		$aluno -> data_nasc = $_POST["data_nasc"];
+		$aluno -> observacao = $_POST["observacao"];
 
+		if ((isset($_POST['id_responsavel1'])) && ($_POST['id_responsavel1'] != '')){
+			$aluno -> responsavel1 = $_POST["id_responsavel1"];
+		}
+		else{
+			$aluno -> responsavel1 = null;
+		}
+		
+		if ((isset($_POST['id_responsavel2'])) && ($_POST['id_responsavel2'] != '')){
+			$aluno -> responsavel2 = $_POST["id_responsavel2"];
+		}
+		else{
+			$aluno -> responsavel2 = null;
+		}	
 		//Chamo a DAO e mando inserir
 
-		if ((!isset($_POST['id_aluno'])) || ($_POST['id_aluno'] == '')){		
+		if ((!isset($_POST['id'])) || ($_POST['id'] == '')){		
 			$retorno = $dao->inserir($aluno);	
 			
 			if ($retorno > 0){		
@@ -57,7 +66,7 @@
 		}
 	
 		else{				
-			$aluno -> id_aluno = $_POST["id"];	
+			$aluno -> id = $_POST["id"];	
 			$retorno = $dao->alterar($aluno);
 			
 			if ($retorno > 0){		
@@ -73,19 +82,7 @@
 						location.href='Aluno.php';
 					</script>";	
 			}			
-		}
-		
-		echo '<script type="text/javascript" language="javascript">
-					$("input[name=id]").val("");
-					$("input[name=nome]").val("");
-					$("input[name=cpf").val("");
-					$("input[name=matricula]").val("");
-					$("input[name=curso]").val("");
-					$("input[name=responsavel1]").val("");  
-					$("input[name=responsavel2]").val("");  
-					$("input[name=data_nasc]").val("");
-				</script>';
-			
+		}			
 	}
 	//comparar idade para campo responsavel
 	echo "<script type='text/javascript' language='javascript'>		
@@ -96,6 +93,40 @@
 ?>
 
 	<script type="text/javascript" language="javascript">	
+		$(function() {
+		//autocomplete
+			$("#responsavel1").autocomplete({
+				source: "aluno_responsavel_autocomplete.php",
+				minLength: 1,
+				select: function( event, ui ) {
+					$("#id_responsavel1").val(ui.item.id_responsavel);
+				}
+			});	
+		});
+	
+	$(function() {
+		//autocomplete
+		$("#responsavel2").autocomplete({
+			source: "aluno_responsavel_autocomplete.php",
+			minLength: 1,
+			select: function( event, ui ) {
+				$("#id_responsavel2").val(ui.item.id_responsavel);
+			}
+		});	
+	});
+	
+		function cleanForm(){
+			$("input[name=id]").val('');
+			$("input[name=nome]").val('');	
+			$("input[name=cpf").val('');
+			$("input[name=matricula]").val('');
+			$("input[name=data_nasc]").val('');
+			$("select[name=curso]").val('');  
+			$("input[name=responsavel1]").val('');    
+			$("input[name=responsavel2]").val('');
+			$("textarea[name=observacao]").val('');   
+		}
+		
 		function fillForm(valor){		
 			if (valor != null) {
 				$.ajax({
@@ -109,9 +140,11 @@
 						$("input[name=nome]").val(response.nome);	
 						$("input[name=cpf").val(response.cpf);
 						$("input[name=matricula]").val(response.matricula);
+						$("input[name=data_nasc]").val(response.data_nasc);
 						$("select[name=curso]").val(response.id_curso);  
 						$("input[name=responsavel1]").val(response.responsavel1);    
-						$("input[name=responsavel2]").val(response.responsavel2);                
+						$("input[name=responsavel2]").val(response.responsavel2);
+						$("textarea[name=observacao]").val(response.observacao);    
 					}
 				});				
 			}
@@ -202,7 +235,7 @@
                 <div class="row">
                     <div class="col-lg-12">
                         <div class="col-lg-6">
-                            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">
+                            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal" onClick='cleanForm();'>
                                 <i class="glyphicon glyphicon-check"></i> Novo cadastro</button>
                         </div>
                         <div class="col-lg-6">
@@ -313,7 +346,7 @@
                                 </div>
                                 <div class="col-lg-1">
                                 	<label></label><br>
-                                	<input type="reset" id="bt_inicio" value=" ... " style="margin-top: 10px">
+                                	<input type="reset" id="bt_inicio" name="bt_inicio" value=" ... " style="margin-top: 10px">
 
 									<script type="text/javascript">
 										Calendar.setup({
@@ -334,10 +367,12 @@
                                     <!-- Tratar autocomplete-->
                                     <label>Responsavel 1</label>
                                     <input style="width: 210px;" class="form-control" id="responsavel1" name="responsavel1">
+                                    <input name="id_responsavel1" type="hidden" id="id_responsavel1" value="" size="20"  />
                                 </div>
                                 <div class="col-lg-3" style="margin-left:20px">
                                      <label>Responsavel 2</label>
                                      <input style="width: 210px;" class="form-control" id="responsavel2" name="responsavel2">
+                                     <input name="id_responsavel2" type="hidden" id="id_responsavel2" value="" size="20"  />
                                 </div>
                             </div>
                         	<div class="form-group row" style="margin-left: 25px;">
@@ -356,7 +391,7 @@
                             <div class="form-group row" style="margin-left: 15px;">
 		                    	<div class="col-lg-4">
 		                    		<label>Observação</label>
-		                    		<textarea rows="6" cols="110" style="border-radius:10px" placeholder="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."></textarea>
+		                    		<textarea rows="6" cols="110" style="border-radius:10px" id='observacao' name='observacao' placeholder="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."></textarea>
 			                    </div><br>
 		                    </div>
                             <div style="margin-left: 80%; margin-bottom: 25px;">

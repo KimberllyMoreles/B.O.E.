@@ -15,11 +15,8 @@
     <script type="text/javascript" src="js/jquery-ui-1.11.4/jquery-ui.min.js"></script>
     <script type="text/javascript" language="javascript" src="js/DataTable/jquery.dataTables.js"></script>  
     <script type="text/javascript" language="javascript" src="js/DataTable/jquery.dataTables.min.js"></script>  
-    
-    <!-- autocomplete Javascript -->
-    <script src="autocomplete/js/autocomplete-min.js"></script>
-    <!-- autocomplete CSS -->
-    <link href="autocomplete/css/autocomplete-min.css" rel="stylesheet" />  
+   
+    	
     
     <!-- calendar stylesheet -->
     <link rel="stylesheet" type="text/css" media="all" href="js/jscalendar-1.0/skins/aqua/theme.css" title="win2k-cold-1" />

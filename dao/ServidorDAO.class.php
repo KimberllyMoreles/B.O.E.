@@ -90,5 +90,28 @@ class ServidorDAO {
         
         return $lista;
     }
+    
+    //método utilizado pelo autocomplete da página de 
+    //ocorrencias para definir servidor solicitante da ocorrencia
+    public function listarServidorAutocomplete($filtro){
+        $parametros = array();
+        $sql = "SELECT id_servidor, nome FROM servidor WHERE status <> 2 AND nome ilike :filtro ";
+        $parametros[":filtro"] = "%".$filtro."%";
+     
+        $query = $this->pdo->prepare($sql);
+        
+        $query->execute($parametros);
+        $json = Array();
+        while ($obj = $query->fetchObject()){
+		array_push($json, 
+			Array(
+				"label" => $obj->nome, 				
+				"id_solicitante" =>$obj->id_servidor//recebe o id do servidor solicitante da ocorrencia
+			)
+		);
+        }
+       
+        return $json;
+    }
 }
 

@@ -39,11 +39,12 @@ class AlunoDAO {
         ':curso' => $obj->curso,
         ':responsavel1' => $obj->responsavel1,
         ':responsavel2' => $obj->responsavel2,
-        ':data_nasc' => $obj->data_nasc
+        ':data_nasc' => $obj->data_nasc,
+        ':observacao'=> $obj->observacao
         );
     
         //prepara o sql
-        $sql = "INSERT INTO aluno(cpf, nome, matricula, id_curso, id_responsavel1, id_responsavel2, data_nasc) VALUES(:cpf, :nome, :matricula, :curso, :responsavel1, :responsavel2, :data_nasc)";
+        $sql = "INSERT INTO aluno(cpf, nome, matricula, id_curso, id_responsavel1, id_responsavel2, data_nasc, observacao) VALUES(:cpf, :nome, :matricula, :curso, :responsavel1, :responsavel2, :data_nasc, :observacao)";
         $retorno = $this->pdo->prepare($sql);
         $retorno->execute($parametros);
                   
@@ -67,24 +68,27 @@ class AlunoDAO {
     public function alterar($obj)
     {
         $parametros = array(
-         ':cpf' => $obj->cpf,
-        'nome' => $obj->nome,
-        ':matricula' => $obj->matricula,
-        ':id_curso' => $obj->curso, 
-        ':id_responsavel1' => $obj->responsavel1,
-        ':id_responsavel2' => $obj->responsavel2,
-        ':data_nasc' => $obj->data_nasc
+		':id'=> $obj->id,
+		':cpf' => $obj->cpf,
+		'nome' => $obj->nome,
+		':matricula' => $obj->matricula,
+		':id_curso' => $obj->curso, 
+		':id_responsavel1' => $obj->responsavel1,
+		':id_responsavel2' => $obj->responsavel2,
+		':data_nasc' => $obj->data_nasc,
+		':observacao'=> $obj->observacao
         );
         //tratar senha
         $sql = "UPDATE aluno SET "
                 . "cpf = :cpf, "
                 . "nome= :nome,"
-                . "matricula= :matricula"
-                . "curso= :curso"
-                . "responsavel1= :responsavel1,"
-                . "responsavel2= :responsavel2,"                
-                . "data_nasc= :data_nasc "
-                . " WHERE id_aluno= :id_aluno";
+                . "matricula= :matricula,"
+                . "id_curso= :id_curso,"
+                . "id_responsavel1= :id_responsavel1,"
+                . "id_responsavel2= :id_responsavel2,"                
+                . "data_nasc= :data_nasc,"                               
+                . "observacao= :observacao "
+                . " WHERE id_aluno= :id";
         $retorno = $this->pdo->prepare($sql);
         $retorno->execute($parametros);        
      	
@@ -93,7 +97,25 @@ class AlunoDAO {
     
    public function buscarChavePrimaria($chaveprimaria)
     {
-        $sql = "SELECT * FROM aluno WHERE id_aluno = :id_aluno";
+        $sql = "
+		SELECT 
+			a.*,
+			r1.nome AS responsavel1,
+			r2.nome AS responsavel2
+		FROM 
+			aluno a
+		LEFT JOIN 
+				responsavel r1
+			ON
+				a.id_responsavel1 = r1.id_responsavel
+		LEFT JOIN responsavel r2
+			ON
+				a.id_responsavel2 = r2.id_responsavel
+		WHERE
+			id_aluno = :id_aluno
+		AND 
+			a.status <> 2";
+			
         $retorno = $this->pdo->prepare($sql);
         $retorno->bindParam(":id_aluno",$chaveprimaria);
         $retorno->execute();
@@ -125,5 +147,26 @@ class AlunoDAO {
         }
           return $lista;
          
+    }
+    
+    public function listarAlunoAutocomplete($filtro){
+        $parametros = array();
+        $sql = "SELECT id_aluno, nome FROM aluno WHERE status <> 2 AND nome ilike :filtro ";
+        $parametros[":filtro"] = "%".$filtro."%";
+     
+        $query = $this->pdo->prepare($sql);
+        
+        $query->execute($parametros);
+        $json = Array();
+        while ($obj = $query->fetchObject()){
+		array_push($json, 
+			Array(
+				"label" => $obj->nome, 				
+				"id_aluno" =>$obj->id_aluno
+			)
+		);
+        }
+       
+        return $json;
     }
 }
