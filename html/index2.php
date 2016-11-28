@@ -198,7 +198,7 @@
                         </a>
                         <ul id="tarefas" class="collapse nav">
                             <li>
-                                <a href="cadastroOcorrencia.php"><i class="glyphicon glyphicon-minus "></i> Cadastro</a>
+                                <a href="CadastroOcorrencia.php"><i class="glyphicon glyphicon-minus "></i> Cadastro</a>
                             </li>
                             <li>
                                 <a href="#"><i class="glyphicon glyphicon-minus "></i> Listagem</a>

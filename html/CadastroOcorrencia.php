@@ -1,7 +1,64 @@
 <?php 
 	include "index2.php";
+	require '../model/Ocorrencia.class.php';
+	require '../dao/OcorrenciaDAO.class.php';
 	
 	$hoje = Date("d/m/y");
+	
+	if (isset($_GET['ocorrencia'])){
+		$ocorrencia = new Ocorrencia();
+		
+		$ocorrencia -> data_cadastro = $_POST["data_cadastro"];
+		$ocorrencia -> id_autuador = $_POST["id_autuador"];
+		//colocar opção para listar inativos
+		$ocorrencia -> id_tipo_ocorrencia = $_POST["id_tipo_ocorrencia"];
+
+		if ((isset($_POST['id_solicitante'])) && ($_POST['id_solicitante'] != '')){
+			$ocorrencia -> id_solicitante = $_POST["id_solicitante"];
+		}
+		else{
+			$ocorrencia -> id_solicitante = null;
+		}
+		
+		
+		//Chamo a DAO e mando inserir
+
+		if ((!isset($_POST['id'])) || ($_POST['id'] == '')){		
+			$retorno = $dao->inserir($ocorrencia);	
+			
+			if ($retorno > 0){		
+				echo "<script language='Javascript'>
+						alert('Aluno adicionado com sucesso');
+						location.href='CadastroOcorrencia.php';
+					</script>";	
+			}
+			else{
+				echo "<script language='Javascript'>
+						alert('Erro ao adicionar aluno');
+						location.href='CadastroOcorrencia.php';
+					</script>";	
+			}		
+		}
+	
+		else{				
+			$ocorrencia -> id = $_POST["id"];	
+			$retorno = $dao->alterar($ocorrencia);
+			
+			if ($retorno > 0){		
+				echo "<script language='Javascript'>
+					alert('Ocorrencia alterada com sucesso');
+					location.href='CadastroOcorrencia.php';
+				</script>";
+			}	
+			
+			else{
+				echo "<script language='Javascript'>
+						alert('Erro ao alterar ocorrencia');
+						location.href='CadastroOcorrencia.php';
+					</script>";	
+			}			
+		}			
+	}
 ?>
 
 	<script type="text/javascript" language="javascript">	
@@ -26,6 +83,21 @@
 					}
 				});	
 			});
+			
+			function validaOcorrencia(){			
+				if (formulario.data.value == ""){
+						alert("Digite a data")
+					return (false)
+				}
+			
+				if (formulario.tipo_ocorrencia.value == ""){
+					alert("Informe o tipo de ocorrencia")
+					return (false)
+				}
+								
+				formulario.submit();
+			
+			}	
 	</script>
 
 		<div>
@@ -42,7 +114,7 @@
         				<button class="glyphicon glyphicon-check btn btn-primary" style="background-color: #00CD00; margin-left:15px"> Notificar responsáveis</button>
                     </div>
                 </div><br><br>
-                <form role="form">
+                <form role="form" onSubmit="return validaOcorrencia()" action="CadastroOcorrencia.php?ocorrencia=true">
                 	<div class="form-group row" style="margin-left: 15px;">
 	                    <div class="col-lg-1">
 	                        <label>Código</label>
@@ -82,20 +154,16 @@
 	                        <input name="id_aluno" type="hidden" id="id_aluno" value="" size="20"  />
 	                    </div>
 	                    <div class="col-lg-3">
-	                        <button class="glyphicon glyphicon-plus btn btn-primary" style="margin-top:23px"></button>
+	                        <button class="glyphicon glyphicon-plus btn btn-primary" style="margin-top:23px" type="submit"></button>
 	                    </div>
                     </div>
                     <div class="form-group row" style="margin-left: 15px;">
                     	<div class="col-lg-3">
-	                        <label>Alunos envolvidos: <br>
-	                        <span class="label label-primary">Tainã Milano</span> <span class="label label-primary">Almir Milano</span></label>
+	                        <label>Alunos envolvidos: <br></label>
 	                    </div>
                     </div>
-                    <div class="form-group row" style="margin-left: 15px;">
-                    	<div class="col-lg-3">
-	                        <span class="label label-primary" id="basic-addon2">Tainã Milano</span> <span class="label label-primary">Almir Milano</span></label>
-	                    </div>
-                    </div>
+                </form>
+                <form role="form" onSubmit="return validaOcorrencia()">
                     <div class="form-group row" style="margin-left: 15px;">
                     	<div class="col-lg-4">
                     		<label>Interação</label>
