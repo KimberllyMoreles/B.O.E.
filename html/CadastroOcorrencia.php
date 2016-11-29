@@ -5,60 +5,6 @@
 	
 	$hoje = Date("d/m/y");
 	
-	if (isset($_GET['ocorrencia'])){
-		$ocorrencia = new Ocorrencia();
-		
-		$ocorrencia -> data_cadastro = $_POST["data_cadastro"];
-		$ocorrencia -> id_autuador = $_POST["id_autuador"];
-		//colocar opção para listar inativos
-		$ocorrencia -> id_tipo_ocorrencia = $_POST["id_tipo_ocorrencia"];
-
-		if ((isset($_POST['id_solicitante'])) && ($_POST['id_solicitante'] != '')){
-			$ocorrencia -> id_solicitante = $_POST["id_solicitante"];
-		}
-		else{
-			$ocorrencia -> id_solicitante = null;
-		}
-		
-		
-		//Chamo a DAO e mando inserir
-
-		if ((!isset($_POST['id'])) || ($_POST['id'] == '')){		
-			$retorno = $dao->inserir($ocorrencia);	
-			
-			if ($retorno > 0){		
-				echo "<script language='Javascript'>
-						alert('Aluno adicionado com sucesso');
-						location.href='CadastroOcorrencia.php';
-					</script>";	
-			}
-			else{
-				echo "<script language='Javascript'>
-						alert('Erro ao adicionar aluno');
-						location.href='CadastroOcorrencia.php';
-					</script>";	
-			}		
-		}
-	
-		else{				
-			$ocorrencia -> id = $_POST["id"];	
-			$retorno = $dao->alterar($ocorrencia);
-			
-			if ($retorno > 0){		
-				echo "<script language='Javascript'>
-					alert('Ocorrencia alterada com sucesso');
-					location.href='CadastroOcorrencia.php';
-				</script>";
-			}	
-			
-			else{
-				echo "<script language='Javascript'>
-						alert('Erro ao alterar ocorrencia');
-						location.href='CadastroOcorrencia.php';
-					</script>";	
-			}			
-		}			
-	}
 ?>
 
 	<script type="text/javascript" language="javascript">	
@@ -97,7 +43,34 @@
 								
 				formulario.submit();
 			
-			}	
+			}
+			
+	$('#salvarOcorrencia').click(function() {
+		var dados = $('#cadOcorrencia').serialize();
+		if ($("input[name=id]").val() != "") {
+			var r=confirm("Alterar o registro selecionado?");
+			if (r==false) {
+				return false;
+			}
+		}
+
+		$.ajax({
+			type: 'POST',
+			dataType: 'json',
+			url: 'cadastroOcorrencia_save.php',
+			async: true,
+			data: dados,
+			success: function(response) {							
+				if(response > 0){
+								alert("Adicionado com sucesso");
+							}
+							else{
+								alert("Erro ao adicionar");
+							}	
+			}
+		});
+		return false;
+	}); 
 	</script>
 
 		<div>
@@ -114,47 +87,47 @@
         				<button class="glyphicon glyphicon-check btn btn-primary" style="background-color: #00CD00; margin-left:15px"> Notificar responsáveis</button>
                     </div>
                 </div><br><br>
-                <form role="form" onSubmit="return validaOcorrencia()" action="CadastroOcorrencia.php?ocorrencia=true">
+                <form role="form" onSubmit="return validaOcorrencia()" method="POST"  id="cadOcorrencia">
                 	<div class="form-group row" style="margin-left: 15px;">
 	                    <div class="col-lg-1">
 	                        <label>Código</label>
-	                        <input style="width: 70px;" class="form-control" placeholder="150" disabled>
+	                        <input style="width: 70px;" class="form-control" placeholder="150" id="id" name='id' disabled>
 	                    </div>
 	                    <div class="col-lg-2">
 	                        <label>Data de cadastro</label>
-	                        <input style="width: 150px;" class="form-control" placeholder="28/09/2016" maxlength="14" value=<?php echo $hoje?>>
+	                        <input id="data_cadastro" name='data_cadastro' style="width: 150px;" class="form-control" placeholder="28/09/2016" maxlength="14" value=<?php echo $hoje?>>
 	                    </div>
 	                    <div class="col-lg-3">
 	                    	<label>Tipo de Ocorrência</label>
-	                    	<select class="form-control" name="" id="">
+	                    	<select class="form-control" name="tipo_ocorrencia" id="tipo_ocorrencia">
 		                    	<option value=""></option>
 	                    		<option value="1">Di&aacute;logo com turma</option>
-	                    		<option value="1">Di&aacute;logo com aluno</option>
-	                    		<option value="1">Di&aacute;logo com respons&aacute;vel</option>
-	                    		<option value="1">Di&aacute;logo com professor</option>
-	                    		<option value="1">Ocorr&ecirc;ncia</option>
+	                    		<option value="2">Di&aacute;logo com aluno</option>
+	                    		<option value="3">Di&aacute;logo com respons&aacute;vel</option>
+	                    		<option value="4">Di&aacute;logo com professor</option>
+	                    		<option value="5">Ocorr&ecirc;ncia</option>
 	                    	</select>
-	                    </div>
+	                    </div> 
 	                </div>
 	                <div class="form-group row" style="margin-left: 15px;">
 	                    <div class="col-lg-3">
 	                        <label>Responsável pela ocorrência</label>
-	                        <input style="width: 240px;" class="form-control" placeholder="Pessoa logada no sistema">
+	                        <input id="autuador" name='autuador' style="width: 240px;" class="form-control" />
 	                    </div>
 	                    <div class="col-lg-3">
 	                        <label>Solicitante</label>
-	                        <input style="width: 245px;" class="form-control" maxlength="14" id='solicitante' name='solicitante'>
-	                        <input name="id_solicitante" type="hidden" id="id_solicitante" value="" size="20"  />
+	                        <input style="width: 245px;" class="form-control" maxlength="14" id='solicitante' name='solicitante' />
+	                        <input name="id_solicitante" type="hidden" id="id_solicitante" value=""   />
 	                    </div>
 	                </div>
 	                <div class="form-group row" style="margin-left: 15px;">
                     	<div class="col-lg-3">
 	                        <label>Aluno envolvido</label>
 	                        <input style="width: 240px;" class="form-control" placeholder="Aluno envolvido na ocorrência" id='aluno' name='aluno'>
-	                        <input name="id_aluno" type="hidden" id="id_aluno" value="" size="20"  />
+	                        <input name="id_aluno" type="hidden" id="id_aluno" value=""  />
 	                    </div>
 	                    <div class="col-lg-3">
-	                        <button class="glyphicon glyphicon-plus btn btn-primary" style="margin-top:23px" type="submit"></button>
+	                        <button class="glyphicon glyphicon-plus btn btn-primary" style="margin-top:23px" type="submit" id="salvarOcorrencia"></button>
 	                    </div>
                     </div>
                     <div class="form-group row" style="margin-left: 15px;">

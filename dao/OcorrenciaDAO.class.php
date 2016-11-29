@@ -40,7 +40,7 @@ class OcorrenciaDAO {
         );
     
         //prepara o sql
-        $sql = "INSERT INTO ocorrencia(data_cadastro, id_ocorrencia, id_solicitante, id_autuador, id_tipo_ocorrencia) VALUES(:data_cadastro, :id_ocorrencia, :id_solicitante, :id_autuador, :id_tipo_ocorrencia)";
+        $sql = "INSERT INTO ocorrencia(data_cadastro, id_solicitante, id_autuador, id_tipo_ocorrencia) VALUES(:data_cadastro,  :id_solicitante, :id_autuador, :id_tipo_ocorrencia)";
         $retorno = $this->pdo->prepare($sql);
         $retorno->execute($parametros);
                   
