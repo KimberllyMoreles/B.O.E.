@@ -47,6 +47,7 @@
 			
 	$('#salvarOcorrencia').click(function() {
 		var dados = $('#cadOcorrencia').serialize();
+		
 		if ($("input[name=id]").val() != "") {
 			var r=confirm("Alterar o registro selecionado?");
 			if (r==false) {
@@ -62,15 +63,15 @@
 			data: dados,
 			success: function(response) {							
 				if(response > 0){
-								alert("Adicionado com sucesso");
-							}
-							else{
-								alert("Erro ao adicionar");
-							}	
+					alert("Adicionado com sucesso");
+				}
+				else{
+					alert("Erro ao adicionar");
+				}
 			}
 		});
 		return false;
-	}); 
+	});
 	</script>
 
 		<div>
@@ -87,7 +88,7 @@
         				<button class="glyphicon glyphicon-check btn btn-primary" style="background-color: #00CD00; margin-left:15px"> Notificar responsáveis</button>
                     </div>
                 </div><br><br>
-                <form role="form" onSubmit="return validaOcorrencia()" method="POST"  id="cadOcorrencia">
+                <form role="form"  method="POST" id="cadOcorrencia">
                 	<div class="form-group row" style="margin-left: 15px;">
 	                    <div class="col-lg-1">
 	                        <label>Código</label>
@@ -99,7 +100,7 @@
 	                    </div>
 	                    <div class="col-lg-3">
 	                    	<label>Tipo de Ocorrência</label>
-	                    	<select class="form-control" name="tipo_ocorrencia" id="tipo_ocorrencia">
+	                    	<select class="form-control" name="tipo_ocorrencia" id="tipo_ocorrencia" name="tipo_ocorrencia" >
 		                    	<option value=""></option>
 	                    		<option value="1">Di&aacute;logo com turma</option>
 	                    		<option value="2">Di&aacute;logo com aluno</option>
@@ -111,7 +112,7 @@
 	                </div>
 	                <div class="form-group row" style="margin-left: 15px;">
 	                    <div class="col-lg-3">
-	                        <label>Responsável pela ocorrência</label>
+	                        <label>Responsável pela ocorr&ecirc;ncia</label>
 	                        <input id="autuador" name='autuador' style="width: 240px;" class="form-control" />
 	                    </div>
 	                    <div class="col-lg-3">
@@ -127,8 +128,8 @@
 	                        <input name="id_aluno" type="hidden" id="id_aluno" value=""  />
 	                    </div>
 	                    <div class="col-lg-3">
-	                        <button class="glyphicon glyphicon-plus btn btn-primary" style="margin-top:23px" type="submit" id="salvarOcorrencia"></button>
-	                    </div>
+	                        <button class="glyphicon glyphicon-plus btn btn-primary" style="margin-top:23px" id="salvarOcorrencia" name="salvarOcorrencia"></button>
+</div>
                     </div>
                     <div class="form-group row" style="margin-left: 15px;">
                     	<div class="col-lg-3">
@@ -139,7 +140,7 @@
                 <form role="form" onSubmit="return validaOcorrencia()">
                     <div class="form-group row" style="margin-left: 15px;">
                     	<div class="col-lg-4">
-                    		<label>Interação</label>
+                    		<label>Intera&ccedil;ão</label>
                             <div class='row' style="margin-left: 0px;">
                                 <input type='radio' name='tipo' id='publico'>
                                 <label for='publico'>Público</label>
