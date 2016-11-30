@@ -44,7 +44,7 @@ class OcorrenciaDAO {
         $retorno = $this->pdo->prepare($sql);
         $retorno->execute($parametros);
                   
-        return $retorno->rowCount();
+        return $this->pdo->lastInsertId('ocorrencia_id_ocorrencia_seq');
     }
     
     public function excluir($chaveprimaria) {

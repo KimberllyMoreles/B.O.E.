@@ -5,6 +5,46 @@
 	
 	$hoje = Date("d/m/y");
 	
+	if (isset($_GET['salvar'])){
+		$ocorrencia = new Ocorrencia();
+		$dao = new OcorrenciaDAO();
+		$ocorrencia -> data_cadastro = $_POST["data_cadastro"];
+		$ocorrencia -> id_solicitante = $_POST["id_solicitante"];
+		$ocorrencia -> id_autuador = $_POST["id_solicitante"];
+		$ocorrencia -> id_tipo_ocorrencia = $_POST["tipo_ocorrencia"];
+
+		/*if ((isset($_POST['id_responsavel1'])) && ($_POST['id_responsavel1'] != '')){
+			$aluno -> responsavel1 = $_POST["id_responsavel1"];
+		}
+		else{
+			$aluno -> responsavel1 = null;
+		}
+		
+		if ((isset($_POST['id_responsavel2'])) && ($_POST['id_responsavel2'] != '')){
+			$aluno -> responsavel2 = $_POST["id_responsavel2"];
+		}
+		else{
+			$aluno -> responsavel2 = null;
+		}	*/
+		//Chamo a DAO e mando inserir
+
+		if ((!isset($_POST['id'])) || ($_POST['id'] == '')){
+			
+			$retorno = $dao->inserir($ocorrencia);
+			
+			$id = $retorno;
+			
+			$dadosOcorrencia = $dao -> buscarChavePrimaria($id);
+			
+			echo($id);
+		}
+
+		else{		
+			$ocorrencia -> id_ocorrencia = $_POST["id"];
+			$retorno = $dao->alterar($ocorrencia);		
+		}			
+	}
+	
 ?>
 
 	<script type="text/javascript" language="javascript">	
@@ -45,33 +85,6 @@
 			
 			}
 			
-	$('#salvarOcorrencia').click(function() {
-		var dados = $('#cadOcorrencia').serialize();
-		
-		if ($("input[name=id]").val() != "") {
-			var r=confirm("Alterar o registro selecionado?");
-			if (r==false) {
-				return false;
-			}
-		}
-
-		$.ajax({
-			type: 'POST',
-			dataType: 'json',
-			url: 'cadastroOcorrencia_save.php',
-			async: true,
-			data: dados,
-			success: function(response) {							
-				if(response > 0){
-					alert("Adicionado com sucesso");
-				}
-				else{
-					alert("Erro ao adicionar");
-				}
-			}
-		});
-		return false;
-	});
 	</script>
 
 		<div>
@@ -88,7 +101,7 @@
         				<button class="glyphicon glyphicon-check btn btn-primary" style="background-color: #00CD00; margin-left:15px"> Notificar responsáveis</button>
                     </div>
                 </div><br><br>
-                <form role="form"  method="POST" id="cadOcorrencia">
+                <form role="form" action="CadastroOcorrencia.php?salvar=true" method="POST" name='formulario' onSubmit="return valida()>
                 	<div class="form-group row" style="margin-left: 15px;">
 	                    <div class="col-lg-1">
 	                        <label>Código</label>
@@ -128,7 +141,7 @@
 	                        <input name="id_aluno" type="hidden" id="id_aluno" value=""  />
 	                    </div>
 	                    <div class="col-lg-3">
-	                        <button class="glyphicon glyphicon-plus btn btn-primary" style="margin-top:23px" id="salvarOcorrencia" name="salvarOcorrencia"></button>
+	                        <button class="glyphicon glyphicon-plus btn btn-primary" style="margin-top:23px"></button>
 </div>
                     </div>
                     <div class="form-group row" style="margin-left: 15px;">
