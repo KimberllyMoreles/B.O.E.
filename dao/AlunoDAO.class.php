@@ -34,7 +34,7 @@ class AlunoDAO {
         //Monta os parâmetros
         $parametros = array(
         ':cpf' => $obj->cpf,
-        'nome' => $obj->nome,
+        ':nome' => $obj->nome,
         ':matricula' => $obj->matricula,
         ':curso' => $obj->curso,
         ':responsavel1' => $obj->responsavel1,
@@ -70,7 +70,7 @@ class AlunoDAO {
         $parametros = array(
 		':id'=> $obj->id,
 		':cpf' => $obj->cpf,
-		'nome' => $obj->nome,
+		':nome' => $obj->nome,
 		':matricula' => $obj->matricula,
 		':id_curso' => $obj->curso, 
 		':id_responsavel1' => $obj->responsavel1,

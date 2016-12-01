@@ -3,45 +3,91 @@
 	require '../model/Ocorrencia.class.php';
 	require '../dao/OcorrenciaDAO.class.php';
 	
+	require '../model/Aluno_Ocorrencia.class.php';
+	require '../dao/Aluno_OcorrenciaDAO.class.php';
+	
 	$hoje = Date("d/m/y");
+	
+	
+	function inserirAluno_Ocorrencia($id_ocorrencia, $id_aluno){			
+		$aluno_ocorrencia = new Aluno_Ocorrencia();
+		$dao_aluno_ocorrencia = new Aluno_OcorrenciaDAO();
+		
+		$aluno_ocorrencia -> id_ocorrencia = $id_ocorrencia;
+		$aluno_ocorrencia -> id_aluno = $id_aluno;
+		
+		$retorno = $dao_aluno_ocorrencia->inserir($aluno_ocorrencia);	
+	}
 	
 	if (isset($_GET['salvar'])){
 		$ocorrencia = new Ocorrencia();
 		$dao = new OcorrenciaDAO();
+		
 		$ocorrencia -> data_cadastro = $_POST["data_cadastro"];
 		$ocorrencia -> id_solicitante = $_POST["id_solicitante"];
 		$ocorrencia -> id_autuador = $_POST["id_solicitante"];
 		$ocorrencia -> id_tipo_ocorrencia = $_POST["tipo_ocorrencia"];
-
-		/*if ((isset($_POST['id_responsavel1'])) && ($_POST['id_responsavel1'] != '')){
-			$aluno -> responsavel1 = $_POST["id_responsavel1"];
-		}
-		else{
-			$aluno -> responsavel1 = null;
-		}
 		
-		if ((isset($_POST['id_responsavel2'])) && ($_POST['id_responsavel2'] != '')){
-			$aluno -> responsavel2 = $_POST["id_responsavel2"];
+		$id_aluno = $_POST['id_aluno'];
+		
+		/*if ((isset($_POST['id_solicitante'])) && ($_POST['id_solicitante'] != '')){
+			$aluno -> id_solicitante = $_POST["id_solicitante"];
 		}
 		else{
-			$aluno -> responsavel2 = null;
-		}	*/
+			$aluno -> id_solicitante = null;
+		}*/
+		
 		//Chamo a DAO e mando inserir
-
-		if ((!isset($_POST['id'])) || ($_POST['id'] == '')){
+		if ((!isset($_POST['id'])) || ($_POST['id'] == '')){			
+			$retorno = $dao->inserir($ocorrencia);			
+			$id_ocorrencia = $retorno;
 			
-			$retorno = $dao->inserir($ocorrencia);
+			inserirAluno_Ocorrencia($id_ocorrencia, $id_aluno);
 			
-			$id = $retorno;
-			
-			$dadosOcorrencia = $dao -> buscarChavePrimaria($id);
-			
-			echo($id);
+//		$dadosOcorrencia = $dao -> buscarChavePrimaria($id);
 		}
 
 		else{		
-			$ocorrencia -> id_ocorrencia = $_POST["id"];
-			$retorno = $dao->alterar($ocorrencia);		
+			$id_ocorrencia = $_POST["id"];
+			
+			$ocorrencia -> id_ocorrencia = $id_ocorrencia;
+			$retorno = $dao->alterar($ocorrencia);
+			
+			inserirAluno_Ocorrencia($id_ocorrencia, $id_aluno);
+		}			
+	}
+	
+	if (isset($_GET['salvarComentario'])){
+		$comentario = new Comentario();
+		$dao = new ComentarioDAO();
+		
+		$comentario -> data_cadastro = $_POST["data_cadastro"];
+		$comentario -> comentario = $_POST["comentario"];
+		$comentario -> id_ocorrencia = $_POST["id"];
+		$comentario -> id_usuario = $_POST["id_solicitante"];
+		$comentario -> tipo_comentario = $_POST["tipo"];
+		
+		/*if ((isset($_POST['id_solicitante'])) && ($_POST['id_solicitante'] != '')){
+			$aluno -> id_solicitante = $_POST["id_solicitante"];
+		}
+		else{
+			$aluno -> id_solicitante = null;
+		}*/
+		
+		//Chamo a DAO e mando inserir
+		if ((!isset($_POST['id_comentario'])) || ($_POST['id_comentario'] == '')){			
+			$retorno = $dao->inserir($comentario);	
+			
+			
+//		$dadosOcorrencia = $dao -> buscarChavePrimaria($_POST["id"]);
+		}
+
+		else{		
+			$id_comentario = $_POST["id_comentario"];
+			
+			$comentario -> id_comentario = $id_comentario;
+			$retorno = $dao->alterar($comentario);
+			
 		}			
 	}
 	
@@ -101,7 +147,7 @@
         				<button class="glyphicon glyphicon-check btn btn-primary" style="background-color: #00CD00; margin-left:15px"> Notificar responsáveis</button>
                     </div>
                 </div><br><br>
-                <form role="form" action="CadastroOcorrencia.php?salvar=true" method="POST" name='formulario' onSubmit="return valida()>
+                <form role="form" action="CadastroOcorrencia.php?salvar=true" method="POST" name='formulario' onSubmit="return validaOcorrencia()>
                 	<div class="form-group row" style="margin-left: 15px;">
 	                    <div class="col-lg-1">
 	                        <label>Código</label>
@@ -150,17 +196,18 @@
 	                    </div>
                     </div>
                 </form>
-                <form role="form" onSubmit="return validaOcorrencia()">
+                <form role="form" onSubmit="return validaComentario()" action="CadastroOcorrencia.php?salvarComentario=true">
                     <div class="form-group row" style="margin-left: 15px;">
+                    <input type="hidden" id="id_comentario" name="id_comentario" />
                     	<div class="col-lg-4">
                     		<label>Intera&ccedil;ão</label>
                             <div class='row' style="margin-left: 0px;">
-                                <input type='radio' name='tipo' id='publico'>
+                                <input type='radio' name='tipo' id='publico' value='publico'>
                                 <label for='publico'>Público</label>
-                                <input type='radio' name='tipo' id='privado'>
+                                <input type='radio' name='tipo' id='privado' value='privado'>
                                 <label for='privado'>Privado</label>
                             </div>
-                    		<textarea rows="6" cols="140" style="border-radius:10px" placeholder="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."></textarea>
+                    		<textarea rows="6" cols="140" style="border-radius:10px" id="comentario" name="comentario" placeholder="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."></textarea>
 	                    </div><br>
                     </div>
                     <div class="form-group row col-lg-12" style="margin-left: 15px;">

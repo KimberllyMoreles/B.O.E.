@@ -1,7 +1,7 @@
 <?php
 
 require_once 'Conexao.class.php';
-class OcorrenciaDAO {
+class ComentarioDAO {
     private $pdo;
     
     public function __construct(){
@@ -12,9 +12,9 @@ class OcorrenciaDAO {
     //Listar
     public function listar($filtro=null,$ordenarPor=null){
         $parametros = array();
-        $sql = "SELECT * FROM ocorrencia WHERE status <> 2";
+        $sql = "SELECT * FROM comentario WHERE status <> 2";
         if(isset($filtro)){
-            $sql .= " AND id_ocorrencia ilike :filtro ";
+            $sql .= " AND id_comentario ilike :filtro ";
             $parametros[":filtro"] = "%".$filtro."%";
         }
         $lista = array();
@@ -33,63 +33,59 @@ class OcorrenciaDAO {
     {
         //Monta os parâmetros
         $parametros = array(
+		    ':id_ocorrencia' => $obj->id_ocorrencia,
+		    ':id_usuario' => $obj->id_usuario,
 		    ':data_cadastro' => $obj->data_cadastro,
-		    ':id_solicitante' => $obj->id_solicitante,
-		    ':id_autuador' => $obj->id_autuador,
-		    ':id_tipo_ocorrencia' => $obj->id_tipo_ocorrencia
+		    ':comentario' => $obj->comentario,
+		    ':tipo_comentario' => $obj->tipo_comentario
         );
     
         //prepara o sql
-        $sql = "INSERT INTO ocorrencia(data_cadastro, id_solicitante, id_autuador, id_tipo_ocorrencia) VALUES(:data_cadastro,  :id_solicitante, :id_autuador, :id_tipo_ocorrencia)";
+        $sql = "INSERT INTO comentario(id_ocorrencia, id_usuario, data_cadastro, comentario, tipo_comentario) VALUES(:id_ocorrencia, :id_usuario, :data_cadastro, :comentario, :tipo_comentario)";
         $retorno = $this->pdo->prepare($sql);
         $retorno->execute($parametros);
                   
-        return $this->pdo->lastInsertId('ocorrencia_id_ocorrencia_seq');
+        return $retorno->rowCount();
     }
     
     public function excluir($chaveprimaria) {
         $sql = "UPDATE 
-        		ocorrencia 
+        			comentario 
         	    SET 
         	    	status = 2
         	    WHERE 
-        	    	id_ocorrencia = :id_ocorrencia";
+        	    	id_comentario = :id_comentario";
+        	    	
         $retorno = $this->pdo->prepare($sql);
-        $retorno->bindParam(":id_ocorrencia", $chaveprimaria);
         $retorno->execute();
-         
+        
         return $retorno->rowCount();
     }
-    
+    /*
     public function alterar($obj)
     {
         $parametros = array(
-			':data_cadastro' => $obj->data_cadastro,
-			'id' => $obj->id,
-			':id_solicitante' => $obj->id_solicitante,
-			':id_autuador' => $obj->id_autuador, 
-			':id_tipo_ocorrencia' => $obj->id_tipo_ocorrencia
+			':id_comentario' => $obj->id_comentario,
+			':id_ocorrencia' => $obj->id_ocorrencia, 
+			':id_comentario' => $obj->id_comentario
         );
         //tratar senha
         $sql = "UPDATE ocorrencia SET "
-                . "data_cadastro = :data_cadastro, "
                 . "id_ocorrencia= :id_ocorrencia,"
-                . "id_solicitante= :id_solicitante,"
-                . "id_autuador= :id_autuador,"
-                . "id_tipo_ocorrencia= :id_tipo_ocorrencia"
-                . " WHERE id_ocorrencia= :id";
+                . "id_comentario= :id_comentario"
+                . " WHERE id_comentario= :id_comentario";
         $retorno = $this->pdo->prepare($sql);
         $retorno->execute($parametros);        
      	
         return $retorno->rowCount();
-    }
+    }*/
     
    public function buscarChavePrimaria($chaveprimaria)
     {
         $sql = "";
 			
         $retorno = $this->pdo->prepare($sql);
-        $retorno->bindParam(":id_ocorrencia",$chaveprimaria);
+        $retorno->bindParam(":id_comentario",$chaveprimaria);
         $retorno->execute();
         
         if($obj = $retorno->fetchObject())

@@ -1,6 +1,6 @@
 <?php
 
-class AlunoOcorrencia {
+class Aluno_Ocorrencia {
 	private $id_aluno_ocorrencia;
 	private $id_ocorrencia;
 	private $id_aluno;
