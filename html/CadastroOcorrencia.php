@@ -6,9 +6,8 @@
 	require '../model/Aluno_Ocorrencia.class.php';
 	require '../dao/Aluno_OcorrenciaDAO.class.php';
 	
-	$hoje = Date("d/m/y");
-	
-	
+	$data_cadastro = Date("d/m/y");
+		
 	function inserirAluno_Ocorrencia($id_ocorrencia, $id_aluno){			
 		$aluno_ocorrencia = new Aluno_Ocorrencia();
 		$dao_aluno_ocorrencia = new Aluno_OcorrenciaDAO();
@@ -17,6 +16,17 @@
 		$aluno_ocorrencia -> id_aluno = $id_aluno;
 		
 		$retorno = $dao_aluno_ocorrencia->inserir($aluno_ocorrencia);	
+	}
+	
+	function preencherFormulario($id_ocorrencia){
+		$dao = new OcorrenciaDAO();
+		$dados_ocorrencia = $dao->buscarChavePrimaria($id_ocorrencia);
+		
+		$id_ocorrencia = $dados_ocorrencia -> id_ocorrencia;
+		$data_cadastro = $dados_ocorrencia -> data_cadastro;
+		$tipo_ocorrencia = $dados_ocorrencia -> id_tipo_ocorrencia;
+		//$solicitante = $dados_ocorrencia -> solicitante;
+		$id_solicitante = $dados_ocorrencia -> id_solicitante;
 	}
 	
 	if (isset($_GET['salvar'])){
@@ -43,8 +53,8 @@
 			$id_ocorrencia = $retorno;
 			
 			inserirAluno_Ocorrencia($id_ocorrencia, $id_aluno);
-			
-//		$dadosOcorrencia = $dao -> buscarChavePrimaria($id);
+						
+			preencherFormulario($id_ocorrencia);
 		}
 
 		else{		
@@ -55,6 +65,13 @@
 			
 			inserirAluno_Ocorrencia($id_ocorrencia, $id_aluno);
 		}			
+	}
+	
+	else{
+		$id_ocorrencia = '';
+		$tipo_ocorrencia = '';
+		//$solicitante = '';
+		$id_solicitante = '';
 	}
 	
 	if (isset($_GET['salvarComentario'])){
@@ -117,8 +134,8 @@
 			});
 			
 			function validaOcorrencia(){			
-				if (formulario.data.value == ""){
-						alert("Digite a data")
+				if (formulario.data_cadastro.value == ""){
+					alert("Digite a data")
 					return (false)
 				}
 			
@@ -130,6 +147,7 @@
 				formulario.submit();
 			
 			}
+			
 			
 	</script>
 
@@ -147,15 +165,15 @@
         				<button class="glyphicon glyphicon-check btn btn-primary" style="background-color: #00CD00; margin-left:15px"> Notificar responsáveis</button>
                     </div>
                 </div><br><br>
-                <form role="form" action="CadastroOcorrencia.php?salvar=true" method="POST" name='formulario' onSubmit="return validaOcorrencia()>
+                <form role="form" action="CadastroOcorrencia.php?salvar=true" method="POST" name='formulario' onSubmit="return validaOcorrencia()">
                 	<div class="form-group row" style="margin-left: 15px;">
 	                    <div class="col-lg-1">
 	                        <label>Código</label>
-	                        <input style="width: 70px;" class="form-control" placeholder="150" id="id" name='id' disabled>
+	                        <input style="width: 70px;" class="form-control" placeholder="150" id="id" name='id' value='<?php echo $id_ocorrencia;?>' disabled>
 	                    </div>
 	                    <div class="col-lg-2">
 	                        <label>Data de cadastro</label>
-	                        <input id="data_cadastro" name='data_cadastro' style="width: 150px;" class="form-control" placeholder="28/09/2016" maxlength="14" value=<?php echo $hoje?>>
+	                        <input id="data_cadastro" name='data_cadastro' value='<?php echo $id_ocorrencia;?>' style="width: 150px;" class="form-control" placeholder="28/09/2016" maxlength="14" >
 	                    </div>
 	                    <div class="col-lg-3">
 	                    	<label>Tipo de Ocorrência</label>
@@ -177,7 +195,7 @@
 	                    <div class="col-lg-3">
 	                        <label>Solicitante</label>
 	                        <input style="width: 245px;" class="form-control" maxlength="14" id='solicitante' name='solicitante' />
-	                        <input name="id_solicitante" type="hidden" id="id_solicitante" value=""   />
+	                        <input name="id_solicitante" id="id_solicitante"  value='<?php echo $id_solicitante;?>'   />
 	                    </div>
 	                </div>
 	                <div class="form-group row" style="margin-left: 15px;">
@@ -202,9 +220,9 @@
                     	<div class="col-lg-4">
                     		<label>Intera&ccedil;ão</label>
                             <div class='row' style="margin-left: 0px;">
-                                <input type='radio' name='tipo' id='publico' value='publico'>
+                                <input type='radio' name='tipo' id='publico' value='1'>
                                 <label for='publico'>Público</label>
-                                <input type='radio' name='tipo' id='privado' value='privado'>
+                                <input type='radio' name='tipo' id='privado' value='2'>
                                 <label for='privado'>Privado</label>
                             </div>
                     		<textarea rows="6" cols="140" style="border-radius:10px" id="comentario" name="comentario" placeholder="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."></textarea>
