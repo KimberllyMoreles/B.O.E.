@@ -6,7 +6,7 @@
 	require '../model/Aluno_Ocorrencia.class.php';
 	require '../dao/Aluno_OcorrenciaDAO.class.php';
 	
-	$data_cadastro = Date("d/m/y");
+	
 		
 	function inserirAluno_Ocorrencia($id_ocorrencia, $id_aluno){			
 		$aluno_ocorrencia = new Aluno_Ocorrencia();
@@ -15,28 +15,39 @@
 		$aluno_ocorrencia -> id_ocorrencia = $id_ocorrencia;
 		$aluno_ocorrencia -> id_aluno = $id_aluno;
 		
-		$retorno = $dao_aluno_ocorrencia->inserir($aluno_ocorrencia);	
+		$retorno = $dao_aluno_ocorrencia->inserir($aluno_ocorrencia);
+						
 	}
 	
-	function preencherFormulario($id_ocorrencia){
+	function buscaOcorrencia($id_ocorrencia){
 		$dao = new OcorrenciaDAO();
 		$dados_ocorrencia = $dao->buscarChavePrimaria($id_ocorrencia);
+		//$id_ocorrencia = $dados_ocorrencia -> id_ocorrencia;
 		
-		$id_ocorrencia = $dados_ocorrencia -> id_ocorrencia;
-		$data_cadastro = $dados_ocorrencia -> data_cadastro;
-		$tipo_ocorrencia = $dados_ocorrencia -> id_tipo_ocorrencia;
-		//$solicitante = $dados_ocorrencia -> solicitante;
-		$id_solicitante = $dados_ocorrencia -> id_solicitante;
+		return $dados_ocorrencia;
+	}
+	
+	function buscaAlunoOcorrencia($id_ocorrencia){
+		$dao = new Aluno_OcorrenciaDAO();
+		$alunos = $dao->buscarAlunoOcorrencia($id_ocorrencia);
+		//$id_ocorrencia = $dados_ocorrencia -> id_ocorrencia;
+		
+		return $alunos;
 	}
 	
 	if (isset($_GET['salvar'])){
 		$ocorrencia = new Ocorrencia();
 		$dao = new OcorrenciaDAO();
 		
+		/*$data_cadastro = $_POST["data_cadastro"];
+		$id_solicitante = $_POST["id_solicitante"];
+		$id_autuador = $_POST["id_solicitante"];
+		$id_tipo_ocorrencia = $_POST["id_tipo_ocorrencia"];
+		*/
 		$ocorrencia -> data_cadastro = $_POST["data_cadastro"];
 		$ocorrencia -> id_solicitante = $_POST["id_solicitante"];
 		$ocorrencia -> id_autuador = $_POST["id_solicitante"];
-		$ocorrencia -> id_tipo_ocorrencia = $_POST["tipo_ocorrencia"];
+		$ocorrencia -> id_tipo_ocorrencia = $_POST["id_tipo_ocorrencia"];
 		
 		$id_aluno = $_POST['id_aluno'];
 		
@@ -53,24 +64,44 @@
 			$id_ocorrencia = $retorno;
 			
 			inserirAluno_Ocorrencia($id_ocorrencia, $id_aluno);
-						
-			preencherFormulario($id_ocorrencia);
+			
+			$dados_ocorrencia = buscaOcorrencia($id_ocorrencia);
+			$alunos = buscaAlunoOcorrencia($id_ocorrencia);
+		
+			$data_cadastro = date('d/m/Y', strtotime($dados_ocorrencia -> data_cadastro));
+			$id_tipo_ocorrencia = $dados_ocorrencia -> id_tipo_ocorrencia;
+			$solicitante = $dados_ocorrencia -> solicitante;
+			$id_solicitante = $dados_ocorrencia -> id_solicitante;
+			
+			
+			
 		}
 
-		else{		
+		else{	//inserir mais de um aluno
 			$id_ocorrencia = $_POST["id"];
 			
 			$ocorrencia -> id_ocorrencia = $id_ocorrencia;
 			$retorno = $dao->alterar($ocorrencia);
 			
 			inserirAluno_Ocorrencia($id_ocorrencia, $id_aluno);
-		}			
+			
+			$dados_ocorrencia = buscaOcorrencia($id_ocorrencia);
+			$alunos = buscaAlunoOcorrencia($id_ocorrencia);
+		
+			$data_cadastro = date('d/m/Y', strtotime($dados_ocorrencia -> data_cadastro));
+			$id_tipo_ocorrencia = $dados_ocorrencia -> id_tipo_ocorrencia;
+			$solicitante = $dados_ocorrencia -> solicitante;
+			$id_solicitante = $dados_ocorrencia -> id_solicitante;
+		}
+		
+					
 	}
 	
 	else{
 		$id_ocorrencia = '';
-		$tipo_ocorrencia = '';
-		//$solicitante = '';
+		$id_tipo_ocorrencia = '';
+		$data_cadastro = Date("d/m/y");
+		$solicitante = '';
 		$id_solicitante = '';
 	}
 	
@@ -108,6 +139,11 @@
 		}			
 	}
 	
+	
+	function selected( $value, $selected ){
+		return $value==$selected ? ' selected="selected"' : '';
+	}
+	
 ?>
 
 	<script type="text/javascript" language="javascript">	
@@ -139,7 +175,7 @@
 					return (false)
 				}
 			
-				if (formulario.tipo_ocorrencia.value == ""){
+				if (formulario.id_tipo_ocorrencia.value == ""){
 					alert("Informe o tipo de ocorrencia")
 					return (false)
 				}
@@ -173,17 +209,17 @@
 	                    </div>
 	                    <div class="col-lg-2">
 	                        <label>Data de cadastro</label>
-	                        <input id="data_cadastro" name='data_cadastro' value='<?php echo $id_ocorrencia;?>' style="width: 150px;" class="form-control" placeholder="28/09/2016" maxlength="14" >
+	                        <input id="data_cadastro" name='data_cadastro' value='<?php echo $data_cadastro;?>' style="width: 150px;" class="form-control" placeholder="28/09/2016" maxlength="14" >
 	                    </div>
 	                    <div class="col-lg-3">
 	                    	<label>Tipo de Ocorrência</label>
-	                    	<select class="form-control" name="tipo_ocorrencia" id="tipo_ocorrencia" name="tipo_ocorrencia" >
+	                    	<select class="form-control" name="id_tipo_ocorrencia" id="id_tipo_ocorrencia">
 		                    	<option value=""></option>
-	                    		<option value="1">Di&aacute;logo com turma</option>
-	                    		<option value="2">Di&aacute;logo com aluno</option>
-	                    		<option value="3">Di&aacute;logo com respons&aacute;vel</option>
-	                    		<option value="4">Di&aacute;logo com professor</option>
-	                    		<option value="5">Ocorr&ecirc;ncia</option>
+	                    		<option value="1"<?php echo selected( '1', $id_tipo_ocorrencia ); ?>>Di&aacute;logo com turma</option>
+	                    		<option value="2"<?php echo selected( '2', $id_tipo_ocorrencia ); ?>>Di&aacute;logo com aluno</option>
+	                    		<option value="3"<?php echo selected( '3', $id_tipo_ocorrencia ); ?>>Di&aacute;logo com respons&aacute;vel</option>
+	                    		<option value="4"<?php echo selected( '4', $id_tipo_ocorrencia ); ?>>Di&aacute;logo com professor</option>
+	                    		<option value="5"<?php echo selected( '5', $id_tipo_ocorrencia ); ?>>Ocorr&ecirc;ncia</option>
 	                    	</select>
 	                    </div> 
 	                </div>
@@ -194,8 +230,8 @@
 	                    </div>
 	                    <div class="col-lg-3">
 	                        <label>Solicitante</label>
-	                        <input style="width: 245px;" class="form-control" maxlength="14" id='solicitante' name='solicitante' />
-	                        <input name="id_solicitante" id="id_solicitante"  value='<?php echo $id_solicitante;?>'   />
+	                        <input style="width: 245px;" class="form-control" maxlength="14" id='solicitante' name='solicitante' value='<?php echo $solicitante;?>'  />
+	                        <input type="hidden" name="id_solicitante" id="id_solicitante"  value='<?php echo $id_solicitante;?>'   />
 	                    </div>
 	                </div>
 	                <div class="form-group row" style="margin-left: 15px;">
@@ -210,7 +246,21 @@
                     </div>
                     <div class="form-group row" style="margin-left: 15px;">
                     	<div class="col-lg-3">
-	                        <label>Alunos envolvidos: <br></label>
+	                        <label id="alunos" name="alunos">Alunos envolvidos: <br></label>
+	                   <?php
+	                   if(isset($alunos)){
+	                   		if($alunos != 0){
+	                   			foreach($alunos as $obj){
+									$id = $obj -> id_aluno;
+									$nome = $obj -> nome;
+									
+									echo "
+										<span value=$id class='label label-primary'> $nome </span>
+									";
+	                   			}
+	                   		}
+	                   	}
+	                   ?>     	
 	                    </div>
                     </div>
                 </form>

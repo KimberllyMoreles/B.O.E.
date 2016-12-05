@@ -79,22 +79,30 @@ class Aluno_OcorrenciaDAO {
         return $retorno->rowCount();
     }*/
     
-   public function buscarChavePrimaria($chaveprimaria)
+   public function buscarAlunoOcorrencia($chaveprimaria)
     {
-        $sql = "";
-			
+    	$parametros = array();
+        $sql = "SELECT 
+        			ao.id_aluno, 
+        			a.nome 
+        		FROM 
+        			aluno_ocorrencia ao, aluno a 
+        		WHERE 
+        			a.status <> 2
+        		AND
+        			ao.id_ocorrencia = $chaveprimaria
+        		AND 
+        			ao.id_aluno = a.id_aluno";
+		
+		$alunos = array();
         $retorno = $this->pdo->prepare($sql);
-        $retorno->bindParam(":id_aluno_ocorrencia",$chaveprimaria);
-        $retorno->execute();
+        $retorno->execute($parametros);
         
-        if($obj = $retorno->fetchObject())
-        {
-            return $obj;
+        while ($obj = $retorno->fetchObject()){
+            $alunos[] = $obj;
         }
-        else
-        {
-            return null;
-        }
+        
+        return $alunos;
          
     }
     
