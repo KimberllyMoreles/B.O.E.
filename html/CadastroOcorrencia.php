@@ -1,11 +1,14 @@
 <?php 
 	include "index2.php";
+	
 	require '../model/Ocorrencia.class.php';
 	require '../dao/OcorrenciaDAO.class.php';
 	
 	require '../model/Aluno_Ocorrencia.class.php';
 	require '../dao/Aluno_OcorrenciaDAO.class.php';
 	
+	require '../model/Comentario.class.php';
+	require '../dao/ComentarioDAO.class.php';
 	
 		
 	function inserirAluno_Ocorrencia($id_ocorrencia, $id_aluno){			
@@ -59,13 +62,15 @@
 		}*/
 		
 		//Chamo a DAO e mando inserir
-		if ((!isset($_POST['id'])) || ($_POST['id'] == '')){			
+		if ((!isset($_POST['id'])) || ($_POST['id'] == '')){
 			$retorno = $dao->inserir($ocorrencia);			
 			$id_ocorrencia = $retorno;
 			
 			inserirAluno_Ocorrencia($id_ocorrencia, $id_aluno);
 			
 			$dados_ocorrencia = buscaOcorrencia($id_ocorrencia);
+			
+			//objeto utilizado no formulario
 			$alunos = buscaAlunoOcorrencia($id_ocorrencia);
 		
 			$data_cadastro = date('d/m/Y', strtotime($dados_ocorrencia -> data_cadastro));
@@ -93,7 +98,6 @@
 			$solicitante = $dados_ocorrencia -> solicitante;
 			$id_solicitante = $dados_ocorrencia -> id_solicitante;
 		}
-		
 					
 	}
 	
@@ -139,7 +143,7 @@
 		}			
 	}
 	
-	
+	//campo selecionado no select do tipo de ocorrencia
 	function selected( $value, $selected ){
 		return $value==$selected ? ' selected="selected"' : '';
 	}
@@ -179,7 +183,7 @@
 					alert("Informe o tipo de ocorrencia")
 					return (false)
 				}
-								
+															
 				formulario.submit();
 			
 			}
@@ -205,7 +209,7 @@
                 	<div class="form-group row" style="margin-left: 15px;">
 	                    <div class="col-lg-1">
 	                        <label>Código</label>
-	                        <input style="width: 70px;" class="form-control" placeholder="150" id="id" name='id' value='<?php echo $id_ocorrencia;?>' disabled>
+	                        <input style="width: 70px;" class="form-control" placeholder="150" id="id" name='id' value='<?php echo $id_ocorrencia;?>' >
 	                    </div>
 	                    <div class="col-lg-2">
 	                        <label>Data de cadastro</label>
@@ -264,7 +268,7 @@
 	                    </div>
                     </div>
                 </form>
-                <form role="form" onSubmit="return validaComentario()" action="CadastroOcorrencia.php?salvarComentario=true">
+                <form role="form" onSubmit="return validaComentario()" action="CadastroOcorrencia.php?salvarComentario=true" method="POST" >
                     <div class="form-group row" style="margin-left: 15px;">
                     <input type="hidden" id="id_comentario" name="id_comentario" />
                     	<div class="col-lg-4">

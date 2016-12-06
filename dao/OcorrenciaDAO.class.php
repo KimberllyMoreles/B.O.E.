@@ -65,7 +65,7 @@ class OcorrenciaDAO {
     {
         $parametros = array(
 			':data_cadastro' => $obj->data_cadastro,
-			'id' => $obj->id,
+			':id_ocorrencia' => $obj->id_ocorrencia,
 			':id_solicitante' => $obj->id_solicitante,
 			':id_autuador' => $obj->id_autuador, 
 			':id_tipo_ocorrencia' => $obj->id_tipo_ocorrencia
@@ -73,11 +73,10 @@ class OcorrenciaDAO {
         //tratar senha
         $sql = "UPDATE ocorrencia SET "
                 . "data_cadastro = :data_cadastro, "
-                . "id_ocorrencia= :id_ocorrencia,"
                 . "id_solicitante= :id_solicitante,"
                 . "id_autuador= :id_autuador,"
                 . "id_tipo_ocorrencia= :id_tipo_ocorrencia"
-                . " WHERE id_ocorrencia= :id";
+                . " WHERE id_ocorrencia= :id_ocorrencia";
         $retorno = $this->pdo->prepare($sql);
         $retorno->execute($parametros);        
      	
