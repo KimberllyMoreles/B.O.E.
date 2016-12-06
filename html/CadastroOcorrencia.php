@@ -113,11 +113,11 @@
 		$comentario = new Comentario();
 		$dao = new ComentarioDAO();
 		
-		$comentario -> data_cadastro = $_POST["data_cadastro"];
+		$comentario -> data_cadastro = Date("d/m/y");
 		$comentario -> comentario = $_POST["comentario"];
-		$comentario -> id_ocorrencia = $_POST["id"];
-		$comentario -> id_usuario = $_POST["id_solicitante"];
-		$comentario -> tipo_comentario = $_POST["tipo"];
+		$comentario -> id_ocorrencia = $_POST["id_ocorrencia"];
+		$comentario -> id_usuario = $_POST["id_usuario"];
+		$comentario -> tipo_comentario = $_POST["tipo_comentario"];
 		
 		/*if ((isset($_POST['id_solicitante'])) && ($_POST['id_solicitante'] != '')){
 			$aluno -> id_solicitante = $_POST["id_solicitante"];
@@ -271,12 +271,14 @@
                 <form role="form" onSubmit="return validaComentario()" action="CadastroOcorrencia.php?salvarComentario=true" method="POST" >
                     <div class="form-group row" style="margin-left: 15px;">
                     <input type="hidden" id="id_comentario" name="id_comentario" />
+                    <input type="hidden" id="id_ocorrencia" name="id_ocorrencia" value=<?php echo $id_ocorrencia; ?> />
+                    <input name="id_usuario" type="hidden" id="id_usuario" value=<? echo $id_solicitante;?> />
                     	<div class="col-lg-4">
                     		<label>Intera&ccedil;ão</label>
                             <div class='row' style="margin-left: 0px;">
-                                <input type='radio' name='tipo' id='publico' value='1'>
+                                <input type='radio' name='tipo_comentario' id='publico' value='1'>
                                 <label for='publico'>Público</label>
-                                <input type='radio' name='tipo' id='privado' value='2'>
+                                <input type='radio' name='tipo_comentario' id='privado' value='2'>
                                 <label for='privado'>Privado</label>
                             </div>
                     		<textarea rows="6" cols="140" style="border-radius:10px" id="comentario" name="comentario" placeholder="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."></textarea>
