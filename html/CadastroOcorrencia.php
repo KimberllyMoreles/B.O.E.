@@ -78,8 +78,10 @@
 			$solicitante = $dados_ocorrencia -> solicitante;
 			$id_solicitante = $dados_ocorrencia -> id_solicitante;
 			
-			
-			
+			echo '<script type="text/javascript" language="javascript">
+				  		document.getElementById("#tipo_comentario").disabled = false;
+				  		document.getElementById("#comentario").disabled = false;
+				  </script>';			
 		}
 
 		else{	//inserir mais de um aluno
@@ -150,7 +152,7 @@
 	
 ?>
 
-	<script type="text/javascript" language="javascript">	
+	<script type="text/javascript" language="javascript">				
 			$(function() {
 				//autocomplete
 				$("#solicitante").autocomplete({
@@ -172,7 +174,14 @@
 					}
 				});	
 			});
-			
+			/*
+			$("#enable").click(function (){
+				// habilita o campo 
+				$("#tipo_comentario").prop("disabled", false);
+				$("#comentario").prop("disabled", false);
+		
+			});
+			*/
 			function validaOcorrencia(){			
 				if (formulario.data_cadastro.value == ""){
 					alert("Digite a data")
@@ -183,10 +192,36 @@
 					alert("Informe o tipo de ocorrencia")
 					return (false)
 				}
-															
+																			
 				formulario.submit();
 			
 			}
+			
+			function validaComentario(){
+				if (formulario.data_cadastro.value == ""){
+					alert("Digite a data")
+					return (false)
+				}
+			
+				if (formulario.id_tipo_ocorrencia.value == ""){
+					alert("Informe o tipo de ocorrencia")
+					return (false)
+				}
+				
+								
+				if (formulario_comentario.tipo_comentario.value == ""){
+					alert("Informe o tipo de comentario")
+					return (false)
+				}
+				
+				if (formulario_comentario.comentario.value == ""){
+					alert("Digite uma descrição ou comentário sobre a ocorrencia")
+					return (false)
+				}			
+				
+			}
+			
+			
 			
 			
 	</script>
@@ -209,7 +244,7 @@
                 	<div class="form-group row" style="margin-left: 15px;">
 	                    <div class="col-lg-1">
 	                        <label>Código</label>
-	                        <input style="width: 70px;" class="form-control" placeholder="150" id="id" name='id' value='<?php echo $id_ocorrencia;?>' >
+	                        <input style="width: 70px;" class="form-control" placeholder="150" id="id" name='id' value='<?php echo $id_ocorrencia;?>' readonly >
 	                    </div>
 	                    <div class="col-lg-2">
 	                        <label>Data de cadastro</label>
@@ -245,7 +280,7 @@
 	                        <input name="id_aluno" type="hidden" id="id_aluno" value=""  />
 	                    </div>
 	                    <div class="col-lg-3">
-	                        <button class="glyphicon glyphicon-plus btn btn-primary" style="margin-top:23px"></button>
+	                        <button class="glyphicon glyphicon-plus btn btn-primary" style="margin-top:23px" id="enable" ></button>
 </div>
                     </div>
                     <div class="form-group row" style="margin-left: 15px;">
@@ -268,20 +303,20 @@
 	                    </div>
                     </div>
                 </form>
-                <form role="form" onSubmit="return validaComentario()" action="CadastroOcorrencia.php?salvarComentario=true" method="POST" >
+                <form role="form" name="formulario_comentario" onSubmit="return validaComentario()" action="CadastroOcorrencia.php?salvarComentario=true" method="POST" >
                     <div class="form-group row" style="margin-left: 15px;">
-                    <input type="hidden" id="id_comentario" name="id_comentario" />
-                    <input type="hidden" id="id_ocorrencia" name="id_ocorrencia" value=<?php echo $id_ocorrencia; ?> />
-                    <input name="id_usuario" type="hidden" id="id_usuario" value=<? echo $id_solicitante;?> />
+                    <input  type="hidden" id="id_comentario" name="id_comentario" />
+                    <input  type="hidden" id="id_ocorrencia" name="id_ocorrencia" value='<?php echo $id_ocorrencia; ?>' />
+                    <input type="hidden" name="id_usuario"  id="id_usuario" value='<?php echo $id_solicitante;?>' />
                     	<div class="col-lg-4">
                     		<label>Intera&ccedil;ão</label>
                             <div class='row' style="margin-left: 0px;">
-                                <input type='radio' name='tipo_comentario' id='publico' value='1'>
+                                <input type='radio' name='tipo_comentario' id='publico' value='1' disabled >
                                 <label for='publico'>Público</label>
-                                <input type='radio' name='tipo_comentario' id='privado' value='2'>
+                                <input type='radio' name='tipo_comentario' id='privado' value='2' disabled >
                                 <label for='privado'>Privado</label>
                             </div>
-                    		<textarea rows="6" cols="140" style="border-radius:10px" id="comentario" name="comentario" placeholder="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."></textarea>
+                    		<textarea rows="6" cols="140" style="border-radius:10px" id="comentario" name="comentario" placeholder="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum." disabled ></textarea>
 	                    </div><br>
                     </div>
                     <div class="form-group row col-lg-12" style="margin-left: 15px;">
