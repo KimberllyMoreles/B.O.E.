@@ -78,10 +78,15 @@
 			$solicitante = $dados_ocorrencia -> solicitante;
 			$id_solicitante = $dados_ocorrencia -> id_solicitante;
 			
-			echo '<script type="text/javascript" language="javascript">
-				  		document.getElementById("#tipo_comentario").disabled = false;
-				  		document.getElementById("#comentario").disabled = false;
-				  </script>';			
+			if ($alunos > 0){
+				echo '<script type="text/javascript" language="javascript">
+					  		$(document).ready(function() {	 
+					  			$("#tipo_comentario1").attr("disabled", false);
+						  		$("#tipo_comentario2").attr("disabled", false);
+						  		$("#comentario").attr("disabled", false);
+							});
+					  </script>';
+			}	
 		}
 
 		else{	//inserir mais de um aluno
@@ -99,6 +104,12 @@
 			$id_tipo_ocorrencia = $dados_ocorrencia -> id_tipo_ocorrencia;
 			$solicitante = $dados_ocorrencia -> solicitante;
 			$id_solicitante = $dados_ocorrencia -> id_solicitante;
+			
+			echo '<script type="text/javascript" language="javascript">
+				  		$("#tipo_comentario1").attr("disabled", false);
+				  		$("#tipo_comentario2").attr("disabled", false);
+				  		$("#comentario").attr("disabled", false);
+				  </script>';	
 		}
 					
 	}
@@ -115,10 +126,10 @@
 		$comentario = new Comentario();
 		$dao = new ComentarioDAO();
 		
-		$comentario -> data_cadastro = Date("d/m/y");
-		$comentario -> comentario = $_POST["comentario"];
 		$comentario -> id_ocorrencia = $_POST["id_ocorrencia"];
 		$comentario -> id_usuario = $_POST["id_usuario"];
+		$comentario -> data_cadastro = Date("d/m/y");
+		$comentario -> comentario = $_POST["comentario"];
 		$comentario -> tipo_comentario = $_POST["tipo_comentario"];
 		
 		/*if ((isset($_POST['id_solicitante'])) && ($_POST['id_solicitante'] != '')){
@@ -280,7 +291,7 @@
 	                        <input name="id_aluno" type="hidden" id="id_aluno" value=""  />
 	                    </div>
 	                    <div class="col-lg-3">
-	                        <button class="glyphicon glyphicon-plus btn btn-primary" style="margin-top:23px" id="enable" ></button>
+	                        <button class="glyphicon glyphicon-plus btn btn-primary" style="margin-top:23px"  ></button>
 </div>
                     </div>
                     <div class="form-group row" style="margin-left: 15px;">
@@ -311,12 +322,12 @@
                     	<div class="col-lg-4">
                     		<label>Intera&ccedil;ão</label>
                             <div class='row' style="margin-left: 0px;">
-                                <input type='radio' name='tipo_comentario' id='publico' value='1' disabled >
+                                <input type='radio' name='tipo_comentario' id='tipo_comentario1' value='1' disabled="disabled" >
                                 <label for='publico'>Público</label>
-                                <input type='radio' name='tipo_comentario' id='privado' value='2' disabled >
+                                <input type='radio' name='tipo_comentario' id='tipo_comentario2' value='0' disabled="disabled" >
                                 <label for='privado'>Privado</label>
                             </div>
-                    		<textarea rows="6" cols="140" style="border-radius:10px" id="comentario" name="comentario" placeholder="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum." disabled ></textarea>
+                    		<textarea rows="6" cols="140" style="border-radius:10px" id="comentario" name="comentario" placeholder="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum." disabled="disabled" ></textarea>
 	                    </div><br>
                     </div>
                     <div class="form-group row col-lg-12" style="margin-left: 15px;">
