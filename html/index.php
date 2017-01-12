@@ -1,9 +1,6 @@
 <?php 
-<<<<<<< HEAD
 	session_start();
 	
-=======
->>>>>>> 96dad1dbbc0ad53738a20255a697dc6d1911f0b9
     require '../model/Servidor.class.php';
     require '../dao/ServidorDAO.class.php';
 
@@ -171,11 +168,7 @@
                     <input style="margin-top:2px; margin-left: 850px" type="text" name="siape" placeholder="siape">
                     <input type="password" name="senha" placeholder="********">
                     
-<<<<<<< HEAD
                     <button type="submit" name="entrar" class="botao2 glyphicon glyphicon-log-in" style="border-style: none; margin-top:10px; padding-top:5px; padding-bottom:6px" "></button>
-=======
-                    <button type="submit" name="entrar" class="botao2 glyphicon glyphicon-log-in" style="border-style: none; margin-top:10px; padding-top:5px; padding-bottom:6px" onclick="fazerLogin();"></button>
->>>>>>> 96dad1dbbc0ad53738a20255a697dc6d1911f0b9
                 </form>
             </div>
             <!-- Sidebar Menu Items - These collapse to the responsive navigation menu on small screens -->
