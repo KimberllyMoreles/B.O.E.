@@ -1,4 +1,6 @@
 <?php
+	session_start();
+	
 	include 'index2.php';
 	require '../model/Responsavel.class.php';
 	require '../dao/ResponsavelDAO.class.php';

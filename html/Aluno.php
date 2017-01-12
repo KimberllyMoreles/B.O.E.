@@ -1,4 +1,6 @@
 <?php
+	session_start();
+	
 	include 'index2.php';
 	require '../model/Aluno.class.php';
 	require '../dao/AlunoDAO.class.php';	

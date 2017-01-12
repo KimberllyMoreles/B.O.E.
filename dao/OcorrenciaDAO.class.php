@@ -33,10 +33,10 @@ class OcorrenciaDAO {
     {
         //Monta os parâmetros
         $parametros = array(
-        ':data_cadastro' => $obj->data_cadastro,
-        ':id_solicitante' => $obj->id_solicitante,
-        ':id_autuador' => $obj->id_autuador,
-        ':id_tipo_ocorrencia' => $obj->id_tipo_ocorrencia
+		    ':data_cadastro' => $obj->data_cadastro,
+		    ':id_solicitante' => $obj->id_solicitante,
+		    ':id_autuador' => $obj->id_autuador,
+		    ':id_tipo_ocorrencia' => $obj->id_tipo_ocorrencia
         );
     
         //prepara o sql
@@ -44,7 +44,7 @@ class OcorrenciaDAO {
         $retorno = $this->pdo->prepare($sql);
         $retorno->execute($parametros);
                   
-        return $retorno->rowCount();
+        return $this->pdo->lastInsertId('ocorrencia_id_ocorrencia_seq');
     }
     
     public function excluir($chaveprimaria) {
@@ -64,20 +64,19 @@ class OcorrenciaDAO {
     public function alterar($obj)
     {
         $parametros = array(
-		':data_cadastro' => $obj->data_cadastro,
-		'id' => $obj->id,
-		':id_solicitante' => $obj->id_solicitante,
-		':id_id_autuador' => $obj->id_autuador, 
-		':id_id_tipo_ocorrencia' => $obj->id_tipo_ocorrencia
+			':data_cadastro' => $obj->data_cadastro,
+			':id_ocorrencia' => $obj->id_ocorrencia,
+			':id_solicitante' => $obj->id_solicitante,
+			':id_autuador' => $obj->id_autuador, 
+			':id_tipo_ocorrencia' => $obj->id_tipo_ocorrencia
         );
         //tratar senha
         $sql = "UPDATE ocorrencia SET "
                 . "data_cadastro = :data_cadastro, "
-                . "id_ocorrencia= :id_ocorrencia,"
                 . "id_solicitante= :id_solicitante,"
-                . "id_id_autuador= :id_id_autuador,"
-                . "id_id_tipo_ocorrencia= :id_id_tipo_ocorrencia"
-                . " WHERE id_ocorrencia= :id";
+                . "id_autuador= :id_autuador,"
+                . "id_tipo_ocorrencia= :id_tipo_ocorrencia"
+                . " WHERE id_ocorrencia= :id_ocorrencia";
         $retorno = $this->pdo->prepare($sql);
         $retorno->execute($parametros);        
      	
@@ -86,7 +85,18 @@ class OcorrenciaDAO {
     
    public function buscarChavePrimaria($chaveprimaria)
     {
-        $sql = "";
+        $sql = "SELECT 
+        			o.id_ocorrencia,
+        			o.data_cadastro,
+        			o.id_tipo_ocorrencia,
+        			o.id_solicitante,
+        			s.nome AS solicitante
+        		FROM 
+        			ocorrencia o, servidor s
+        		WHERE 
+        			o.id_ocorrencia = :id_ocorrencia
+        		AND 
+        			o.id_solicitante = s.id_servidor";
 			
         $retorno = $this->pdo->prepare($sql);
         $retorno->bindParam(":id_ocorrencia",$chaveprimaria);
