@@ -1,3 +1,10 @@
+<?php 
+    require '../model/Servidor.class.php';
+    require '../dao/ServidorDAO.class.php';
+
+    $dao = new ServidorDAO();
+    $login = $dao->listar();
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -155,11 +162,11 @@
             </div>
             <!-- Top Menu Items -->
             <div class="row">
-                <form action="login.php" method="POST">
+                <form action="servidor_login.php" method="POST">
                     <input style="margin-top:2px; margin-left: 850px" type="text" name="siape" placeholder="siape">
                     <input type="password" name="senha" placeholder="********">
                     
-                    <button type="submit" name="entrar" class="botao2 glyphicon glyphicon-log-in" style="border-style: none; margin-top:10px; padding-top:5px; padding-bottom:6px"></button>
+                    <button type="submit" name="entrar" class="botao2 glyphicon glyphicon-log-in" style="border-style: none; margin-top:10px; padding-top:5px; padding-bottom:6px" onclick="fazerLogin();"></button>
                 </form>
             </div>
             <!-- Sidebar Menu Items - These collapse to the responsive navigation menu on small screens -->

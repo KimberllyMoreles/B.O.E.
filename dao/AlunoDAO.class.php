@@ -134,7 +134,7 @@ class AlunoDAO {
     //função que realiza a busca de alunos relacionados a determinado responsável
     public function buscarAlunoPorResponsavel($chaveprimaria)
     {
-       $parametros = Array();
+        $parametros = Array();
         $sql = "SELECT * FROM aluno WHERE id_responsavel1 = $chaveprimaria OR id_responsavel2 = $chaveprimaria";
         $lista = array();
         $query = $this->pdo->prepare($sql);

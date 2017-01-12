@@ -113,5 +113,29 @@ class ServidorDAO {
        
         return $json;
     }
+
+    public function fazerLogin($siape, $senha){
+        $sql = "SELECT id_servidor, nome FROM servidor WHERE siape = '$siape' AND senha = '$senha'";
+        $lista = array();
+        $query = $this->pdo->prepare($sql);
+
+        
+        $dados = pg_fetch_object($query);
+        $_SESSION['usuario']['id'] = $dados['id_servidor'];
+        $_SESSION['usuario']['nome'] = $dados['nome'];
+
+        echo $dados['id_servidor'];
+        echo $dados['nome'];
+        $query->execute();
+
+        if($obj=$query->fetchObject()){
+            return $obj;
+        }
+        else{
+            return null;
+        }
+
+        
+    }
 }
 
