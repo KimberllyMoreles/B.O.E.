@@ -118,15 +118,25 @@ class ServidorDAO {
         $sql = "SELECT id_servidor, nome FROM servidor WHERE siape = '$siape' AND senha = '$senha'";
         $lista = array();
         $query = $this->pdo->prepare($sql);
+<<<<<<< HEAD
         
         $query->execute();
         
         $dados =$query->rowCount();
+=======
+
+        
+        $dados = pg_fetch_object($query);
+>>>>>>> 96dad1dbbc0ad53738a20255a697dc6d1911f0b9
         $_SESSION['usuario']['id'] = $dados['id_servidor'];
         $_SESSION['usuario']['nome'] = $dados['nome'];
 
         echo $dados['id_servidor'];
         echo $dados['nome'];
+<<<<<<< HEAD
+=======
+        $query->execute();
+>>>>>>> 96dad1dbbc0ad53738a20255a697dc6d1911f0b9
 
         if($obj=$query->fetchObject()){
             return $obj;
@@ -134,6 +144,7 @@ class ServidorDAO {
         else{
             return null;
         }
+<<<<<<< HEAD
         
     }
     /*
@@ -141,5 +152,10 @@ class ServidorDAO {
 		session_destroy();
 		header("Location: dirname(__FILE__)/../index.php");
 	}*/
+=======
+
+        
+    }
+>>>>>>> 96dad1dbbc0ad53738a20255a697dc6d1911f0b9
 }
 
