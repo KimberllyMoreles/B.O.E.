@@ -1,12 +1,18 @@
-<?php 
-	session_start();
+<?php
+	  // A sessão precisa ser iniciada em cada página diferente
+	  if (!isset($_SESSION)) session_start();
 	
-    require '../model/Servidor.class.php';
-    require '../dao/ServidorDAO.class.php';
-
-    $dao = new ServidorDAO();
-    $login = $dao->listar();
+	  // Verifica se não há a variável da sessão que identifica o usuário
+	  if (!isset($_SESSION['UsuarioID'])) {
+	      // Destrói a sessão por segurança
+	      session_destroy();
+	      // Redireciona o visitante de volta pro login
+	      header("Location: Login.php"); exit;
+	  }
+	  $nomeUsuario = $_SESSION['UsuarioNome'];
+	  $idUsuario = $_SESSION['UsuarioID'];
 ?>
+	  
 <!DOCTYPE html>
 <html lang="en">
 
@@ -18,27 +24,27 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>B.O.E</title>
+    <title>SB Admin - Bootstrap Admin Template</title>
 
-    <script type="text/javascript" src="js/jquery-1.12.2.js"></script>
-    <script type="text/javascript" src="js/jquery-ui-1.11.4/jquery-ui.min.js"></script>
-    <script type="text/javascript" language="javascript" src="js/DataTable/jquery.dataTables.js"></script>  
-    <script type="text/javascript" language="javascript" src="js/DataTable/jquery.dataTables.min.js"></script>  
-   
-    	
-    
-    <!-- calendar stylesheet -->
-    <link rel="stylesheet" type="text/css" media="all" href="js/jscalendar-1.0/skins/aqua/theme.css" title="win2k-cold-1" />
+	<script type="text/javascript" src="js/jquery-1.12.2.js"></script>
+	<script type="text/javascript" src="js/jquery-ui-1.11.4/jquery-ui.min.js"></script>
+	<script type="text/javascript" language="javascript" src="js/DataTable/jquery.dataTables.js"></script>	
+	<script type="text/javascript" language="javascript" src="js/DataTable/jquery.dataTables.min.js"></script>	
+	
+	 
+	
+	<!-- calendar stylesheet -->
+	<link rel="stylesheet" type="text/css" media="all" href="js/jscalendar-1.0/skins/aqua/theme.css" title="win2k-cold-1" />
 
-    <!-- main calendar program -->
-    <script type="text/javascript" src="js/jscalendar-1.0/calendar.js"></script>
+	<!-- main calendar program -->
+	<script type="text/javascript" src="js/jscalendar-1.0/calendar.js"></script>
 
-    <!-- language for the calendar -->
-    <script type="text/javascript" src="js/jscalendar-1.0/lang/calendar-br.js"></script>
+	<!-- language for the calendar -->
+	<script type="text/javascript" src="js/jscalendar-1.0/lang/calendar-br.js"></script>
 
-    <!-- the following script defines the Calendar.setup helper function, which makes
-        adding a calendar a matter of 1 or 2 lines of code. -->
-    <script type="text/javascript" src="js/jscalendar-1.0/calendar-setup.js"></script>  
+	<!-- the following script defines the Calendar.setup helper function, which makes
+		adding a calendar a matter of 1 or 2 lines of code. -->
+	<script type="text/javascript" src="js/jscalendar-1.0/calendar-setup.js"></script>	
 
     <!-- Bootstrap Core CSS -->
     <link href="outros/startbootstrap-sb-admin-1.0.4/css/bootstrap.min.css" rel="stylesheet">
@@ -66,85 +72,87 @@
     <![endif]-->
 
 <style type="text/css">
-    .fundotable{
-        background-color: #CCCCCC;
-    }
-    .negrito{
-        font-weight: bold;
-    }
-    .margemEsq{
-        margin-left: 60px;
-    }
+	.fundotable{
+		background-color: #CCCCCC;
+	}
+	.negrito{
+		font-weight: bold;
+	}
+	.margemEsq{
+		margin-left: 60px;
+	}
 
-    .margemTop{
-        margin-top: 70px;
-    }
+	.margemTop{
+		margin-top: 70px;
+	}
 
-    .margemSearch{
-        margin-left: 400px;
-        border-radius: 4px;
-        padding: 10px 32px;
-    }
+	.margemSearch{
+		margin-left: 400px;
+		border-radius: 4px;
+		padding: 10px 32px;
+	}
 
-    .botao1{
-        background-color: #008CBA; /* Blue */
-        border: none;
-        color: white;
-        padding: 15px 32px;
-        text-align: center;
-        text-decoration: none;
-        display: inline-block;
-        font-size: 16px;
-        border-radius: 4px;
-        margin-top: 25px;
-    }
+	.botao1{
+		background-color: #008CBA; /* Blue */
+	    border: none;
+	    color: white;
+	    padding: 15px 32px;
+	    text-align: center;
+	    text-decoration: none;
+	    display: inline-block;
+	    font-size: 16px;
+	    border-radius: 4px;
+	    margin-top: 25px;
+	}
 
-    .botao2{
-        background-color: white;
-        border: none;
-        color: gray;
-        padding: 10px 20px;
-        text-align: center;
-        text-decoration: none;
-        display: inline-block;
-        font-size: 16px;
-        border-radius: 4px;
-    }
-    
-    .botaoEditar{
-        background-color: #4CAF50; /* Green */
-        border: none;
-        color: white;
-        padding: 10px 20px;
-        text-align: center;
-        text-decoration: none;
-        display: inline-block;
-        font-size: 14px;
-        border-radius: 4px;
-    }
+	.botao2{
+		background-color: white;
+	    border: none;
+	    color: gray;
+	    padding: 10px 20px;
+	    text-align: center;
+	    text-decoration: none;
+	    display: inline-block;
+	    font-size: 16px;
+	    border-radius: 4px;
+	}
+	
+	.botaoEditar{
+		background-color: #4CAF50; /* Green */
+	 	border: none;
+	    color: white;
+	    padding: 10px 20px;
+	    text-align: center;
+	    text-decoration: none;
+	    display: inline-block;
+	    font-size: 14px;
+	    border-radius: 4px;
+	}
 
-    .botaoDeletar{
-        background-color: #f44336; /* Red */
-        border: none;
-        color: white;
-        padding: 10px 20px;
-        text-align: center;
-        text-decoration: none;
-        display: inline-block;
-        font-size: 14px;
-        border-radius: 4px;
-    }
+	.botaoDeletar{
+		background-color: #f44336; /* Red */
+	 	border: none;
+	    color: white;
+	    padding: 10px 20px;
+	    text-align: center;
+	    text-decoration: none;
+	    display: inline-block;
+	    font-size: 14px;
+	    border-radius: 4px;
+	}
 
-    .margemTable{
-        margin-top: 25px;
-    }
-
-    body{
-        background-color: #CCCCCC;
-    }
+	.margemTable{
+		margin-top: 25px;
+	}
+	
+	body{
+		background-color: #CCCCCC;
+	}
 
 </style>
-
+<script type="text/javascript" src="js/jquery-1.9.1.min.js"></script>
+	<script type="text/javascript" src="js/jquery-ui.min.js"></script>	
+    	<link rel="stylesheet" href="css/jquery-ui.min.css" type="text/css" /> 
 </head>
 
 
@@ -163,14 +171,20 @@
                 <a class="navbar-brand" href="index.php">B.O.E</a>
             </div>
             <!-- Top Menu Items -->
-            <div class="row">
-                <form action="servidor_login.php" method="POST">
-                    <input style="margin-top:2px; margin-left: 850px" type="text" name="siape" placeholder="siape">
-                    <input type="password" name="senha" placeholder="********">
-                    
-                    <button type="submit" name="entrar" class="botao2 glyphicon glyphicon-log-in" style="border-style: none; margin-top:10px; padding-top:5px; padding-bottom:6px" "></button>
-                </form>
-            </div>
+            <ul class="nav navbar-right top-nav">
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="glyphicon glyphicon-user"></i> <?php echo $nomeUsuario; ?> <b class="caret"></b></a>
+                    <ul class="dropdown-menu">
+                        <li>
+                            <a href="#"><i class="glyphicon glyphicon-user"></i> Meu perfil</a>
+                        </li>
+                        <li class="divider"></li>
+                        <li>
+                            <a href="logout.php"><i class="glyphicon glyphicon-off "></i> Sair</a>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
             <!-- Sidebar Menu Items - These collapse to the responsive navigation menu on small screens -->
             <div class="collapse navbar-collapse navbar-ex1-collapse">
                 <ul class="nav navbar-nav side-nav">
@@ -178,8 +192,8 @@
                         <a href="index.php"><i class="glyphicon glyphicon-dashboard"></i> Dashboard</a>
                     </li>
                     <li>
-                        <a href="javascript:;" data-toggle="collapse" data-target="#pessoas">
-                            <i class="glyphicon glyphicon-user"></i> Pessoa
+                    	<a href="javascript:;" data-toggle="collapse" data-target="#pessoas">
+                        	<i class="glyphicon glyphicon-user"></i> Pessoa
                         </a>
                         <ul id="pessoas" class="collapse nav">
                             <li>
@@ -194,8 +208,8 @@
                         </ul>
                     </li>
                     <li>
-                        <a href="javascript:;" data-toggle="collapse" data-target="#tarefas">
-                            <i class="glyphicon glyphicon-list-alt"></i> Ocorrencia
+                    	<a href="javascript:;" data-toggle="collapse" data-target="#tarefas">
+                        	<i class="glyphicon glyphicon-list-alt"></i> Ocorrencia
                         </a>
                         <ul id="tarefas" class="collapse nav">
                             <li>

@@ -17,4 +17,5 @@ class Servidor{
     public function __set($key, $value){
         $this->$key = $value;
     }
+ 
 }

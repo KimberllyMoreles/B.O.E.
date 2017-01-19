@@ -6,7 +6,7 @@ class Conexao{
         try{
             $db_host = 'pgsql:host=localhost;port=5432;dbname=boe;';
             $db_user = 'postgres';
-            $db_pass = '123';
+            $db_pass = 'postgres';
             
             $this-> pdo = new PDO($db_host, $db_user, $db_pass);
             $this-> pdo-> setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING);

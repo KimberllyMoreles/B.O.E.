@@ -103,43 +103,32 @@ class ServidorDAO {
         $query->execute($parametros);
         $json = Array();
         while ($obj = $query->fetchObject()){
-			array_push($json, 
-				Array(
-					"label" => $obj->nome, 				
-					"id_solicitante" =>$obj->id_servidor//recebe o id do servidor solicitante da ocorrencia
-				)
-			);
+		array_push($json, 
+			Array(
+				"label" => $obj->nome, 				
+				"id_solicitante" =>$obj->id_servidor//recebe o id do servidor solicitante da ocorrencia
+			)
+		);
         }
        
         return $json;
     }
-
-    public function fazerLogin($siape, $senha){
-        $sql = "SELECT id_servidor, nome FROM servidor WHERE siape = '$siape' AND senha = '$senha'";
-        $lista = array();
-        $query = $this->pdo->prepare($sql);
-        
-        $query->execute();
-        
-        $dados =$query->rowCount();
-        $_SESSION['usuario']['id'] = $dados['id_servidor'];
-        $_SESSION['usuario']['nome'] = $dados['nome'];
-
-        echo $dados['id_servidor'];
-        echo $dados['nome'];
-
-        if($obj=$query->fetchObject()){
-            return $obj;
-        }
-        else{
-            return null;
-        }
-        
-    }
-    /*
-	function deslogar(){
-		session_destroy();
-		header("Location: dirname(__FILE__)/../index.php");
-	}*/
+    
+	public function login($obj){
+		$parametros = array(
+			':siape'=> $obj->siape,
+			':senha'=> $obj->senha
+		);
+		$sql = ("SELECT id_servidor, nome, id_categoria FROM servidor WHERE siape = :siape AND senha = :senha AND status <> 2 LIMIT 1");
+		$retorno = $this->pdo->prepare($sql);
+        	$retorno->execute($parametros);
+        	
+		if($obj=$retorno->fetch()){
+		    return $obj;
+		}
+		else{
+		    return null;
+		}
+	} 
 }
 

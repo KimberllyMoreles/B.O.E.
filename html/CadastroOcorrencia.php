@@ -1,7 +1,16 @@
 <?php 
-	session_start();
+	// A sessão precisa ser iniciada em cada página diferente
+	if (!isset($_SESSION)) session_start();
+
+	// Verifica se não há a variável da sessão que identifica o usuário
+	if (!isset($_SESSION['UsuarioID'])) {
+		// Destrói a sessão por segurança
+		session_destroy();
+		// Redireciona o visitante de volta pro login
+		header("Location: Login.php"); exit;
+	}
 	
-	include "index2.php";
+	include "index.php";
 	
 	require '../model/Ocorrencia.class.php';
 	require '../dao/OcorrenciaDAO.class.php';
@@ -51,7 +60,7 @@
 		*/
 		$ocorrencia -> data_cadastro = $_POST["data_cadastro"];
 		$ocorrencia -> id_solicitante = $_POST["id_solicitante"];
-		$ocorrencia -> id_autuador = $_POST["id_solicitante"];
+		$ocorrencia -> id_autuador = $_POST["id_autuador"];
 		$ocorrencia -> id_tipo_ocorrencia = $_POST["id_tipo_ocorrencia"];
 		
 		$id_aluno = $_POST['id_aluno'];
@@ -278,7 +287,8 @@
 	                <div class="form-group row" style="margin-left: 15px;">
 	                    <div class="col-lg-3">
 	                        <label>Responsável pela ocorr&ecirc;ncia</label>
-	                        <input id="autuador" name='autuador' style="width: 240px;" class="form-control" />
+	                        <input style="width: 245px;" class="form-control" maxlength="14" id='autuador' name='autuador' value='<?php echo $nomeUsuario;?>' readonly />
+	                        <input type="hidden" name="id_autuador" id="id_autuador"  value='<?php echo $idUsuario;?>'   />
 	                    </div>
 	                    <div class="col-lg-3">
 	                        <label>Solicitante</label>
