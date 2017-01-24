@@ -45,15 +45,15 @@ class Aluno_OcorrenciaDAO {
         return $retorno->rowCount();
     }
     
-    public function excluir($chaveprimaria) {
+    public function excluir($idAluno, $idOcorrencia) {
         $sql = "UPDATE 
         			aluno_ocorrencia 
         	    SET 
         	    	status = 2
         	    WHERE 
-        	    	id_aluno = :id_aluno
+        	    	id_aluno = $idAluno
         	    AND 
-        	    	id_ocorrencia = :id_ocorrencia";
+        	    	id_ocorrencia = $idOcorrencia";
         	    	
         $retorno = $this->pdo->prepare($sql);
         $retorno->execute();
@@ -106,5 +106,23 @@ class Aluno_OcorrenciaDAO {
          
     }
     
+    public function buscarAluno($idAluno, $idOcorrencia){
+        $sql = "SELECT 
+        			ao.id_aluno
+        		FROM 
+        			aluno_ocorrencia ao
+        		WHERE 
+        			ao.id_ocorrencia = $idOcorrencia
+        		AND 
+        			ao.id_aluno = $idAluno";
+		
+		$alunos = array();
+        $retorno = $this->pdo->prepare($sql);
+        $retorno->execute();
+    
+        
+        return $retorno->rowCount();
+         
+    }
     
 }

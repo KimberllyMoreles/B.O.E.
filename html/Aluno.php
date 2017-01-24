@@ -1,15 +1,4 @@
-<?php
-	// A sessão precisa ser iniciada em cada página diferente
-	if (!isset($_SESSION)) session_start();
-
-	// Verifica se não há a variável da sessão que identifica o usuário
-	if (!isset($_SESSION['UsuarioID'])) {
-		// Destrói a sessão por segurança
-		session_destroy();
-		// Redireciona o visitante de volta pro login
-		header("Location: Login.php"); exit;
-	}
-	
+<?php	
 	include 'index.php';
 	require '../model/Aluno.class.php';
 	require '../dao/AlunoDAO.class.php';	
@@ -23,6 +12,56 @@
 		$lista = $dao->listar(); 
      	}
      		
+	function salvar($aluno){	
+		$dao = new AlunoDAO();
+		if ((!isset($_POST["id"])) || ($_POST["id"] == '')){
+			$verificaCpf = $dao -> buscarPorCpf( $_POST["cpf"]);
+		
+			if($verificaCpf == null){
+				$retorno = $dao->inserir($aluno);	
+
+				if ($retorno > 0){		
+					echo "<script language='Javascript'>
+							alert('Aluno adicionado com sucesso');
+							location.href='Aluno.php';
+						</script>";	
+				}
+				else{
+					echo "<script language='Javascript'>
+							alert('Erro ao adicionar aluno');
+							location.href='Aluno.php';
+						</script>";	
+				}	
+			
+			}
+		
+			else{
+				echo "<script language='Javascript'>
+						alert('CPF duplicado. Por favor, verifique e tente novamente.');
+					</script>";	
+			}
+				
+		}
+
+		else{
+			$aluno -> id = $_POST["id"];		
+			$retorno = $dao->alterar($aluno);
+
+			if ($retorno > 0){		
+				echo "<script language='Javascript'>
+					alert('Aluno alterado com sucesso');
+					location.href='Aluno.php';
+				</script>";
+			}	
+
+			else{
+				echo "<script language='Javascript'>
+						alert('Erro ao alterar aluno');
+						location.href='Aluno.php';
+					</script>";	
+			}			
+		}
+	}
 	
 	if (isset($_GET['acao'])=='excluir'){
 		$dao = new AlunoDAO();
@@ -33,9 +72,9 @@
 			 </script>';
 	}
 	
-	if (isset($_GET['salvar'])){
+	if (isset($_GET['salvar'])){	
 		$aluno = new Aluno();
-		
+			
 		$aluno -> nome = $_POST["nome"];
 		$aluno -> cpf = $_POST["cpf"];
 		$aluno -> matricula = $_POST["matricula"];
@@ -43,64 +82,68 @@
 		$aluno -> curso = $_POST["curso"];
 		$aluno -> data_nasc = $_POST["data_nasc"];
 		$aluno -> observacao = $_POST["observacao"];
-
-		if ((isset($_POST['id_responsavel1'])) && ($_POST['id_responsavel1'] != '')){
-			$aluno -> responsavel1 = $_POST["id_responsavel1"];
-		}
-		else{
-			$aluno -> responsavel1 = null;
-		}
 		
-		if ((isset($_POST['id_responsavel2'])) && ($_POST['id_responsavel2'] != '')){
-			$aluno -> responsavel2 = $_POST["id_responsavel2"];
-		}
-		else{
-			$aluno -> responsavel2 = null;
-		}	
-		//Chamo a DAO e mando inserir
+		// Declara a data
+		$data =  $_POST["data_nasc"];
 
-		if ((!isset($_POST['id'])) || ($_POST['id'] == '')){		
-			$retorno = $dao->inserir($aluno);	
-			
-			if ($retorno > 0){		
+		// Separa em dia, mês e ano
+		list($dia, $mes, $ano) = explode('/', $data);
+
+		// Descobre que dia é hoje e retorna a unix timestamp
+		$hoje = mktime(0, 0, 0, date('m'), date('d'), date('Y'));
+		// Descobre a unix timestamp da data de nascimento do fulano
+		$nascimento = mktime( 0, 0, 0, $mes, $dia, $ano);
+
+		// Depois apenas fazemos o cálculo já citado :)
+		$idade = floor((((($hoje - $nascimento) / 60) / 60) / 24) / 365.25);
+
+		//menor de idade
+		if ($idade < 18){		
+			//verifica se ao menos um dos campos de responsável está preenchido
+			if ((isset($_POST['id_responsavel1'])) && ($_POST['id_responsavel1'] == '') && (isset($_POST['id_responsavel2'])) && ($_POST['id_responsavel2'] == '') ){
+				//se os campos estiverem vazios alerta
 				echo "<script language='Javascript'>
-						alert('Aluno adicionado com sucesso');
-						location.href='Aluno.php';
-					</script>";	
-			}
-			else{
-				echo "<script language='Javascript'>
-						alert('Erro ao adicionar aluno');
-						location.href='Aluno.php';
-					</script>";	
-			}		
-		}
-	
-		else{				
-			$aluno -> id = $_POST["id"];	
-			$retorno = $dao->alterar($aluno);
-			
-			if ($retorno > 0){		
-				echo "<script language='Javascript'>
-					alert('Aluno alterado com sucesso');
+					alert('Alunos menores de idade necessitam do registro de um responsável');
 					location.href='Aluno.php';
-				</script>";
+				</script>";	
 			}	
+			//se não estiverem vazios
+			else{					
+				if ((isset($_POST['id_responsavel1'])) && ($_POST['id_responsavel1'] != '')){
+					$aluno -> responsavel1 = $_POST["id_responsavel1"];					
+				}
+				else{
+					$aluno -> responsavel1 = null;
+				}
+
+				if ((isset($_POST['id_responsavel2'])) && ($_POST['id_responsavel2'] != '')){
+					$aluno -> responsavel2 = $_POST["id_responsavel2"];					
+				}
+				else{
+					$aluno -> responsavel2 = null;
+				}
+				salvar($aluno);
+			}	
+		}
 			
-			else{
-				echo "<script language='Javascript'>
-						alert('Erro ao alterar aluno');
-						location.href='Aluno.php';
-					</script>";	
-			}			
-		}			
-	}
-	//comparar idade para campo responsavel
-	echo "<script type='text/javascript' language='javascript'>		
-			function idadeAluno(data_nasc){
-				
+		//se maior de idade
+		else{					
+			if ((isset($_POST['id_responsavel1'])) && ($_POST['id_responsavel1'] != '')){
+				$aluno -> responsavel1 = $_POST["id_responsavel1"];					
 			}
-		</script>";
+			else{
+				$aluno -> responsavel1 = null;	
+			}
+
+			if ((isset($_POST['id_responsavel2'])) && ($_POST['id_responsavel2'] != '')){
+				$aluno -> responsavel2 = $_POST["id_responsavel2"];
+			}
+			else{
+				$aluno -> responsavel2 = null;	
+			}				
+			salvar($aluno);		
+		}	
+	}
 ?>
 
 	<script type="text/javascript" language="javascript">	
@@ -200,21 +243,14 @@
 			}
 			
 			if (formulario.data_nasc.value == ""){
-				alert("Digite a matrícula")
+				alert("Digite a data de nascimento do aluno")
 				return (false)
 			}
 			
 			if (formulario.matricula.value == ""){
 				alert("Digite a matrícula")
 				return (false)
-			}
-			
-			//comparar idade para campo responsavel
-			/*if (formulario.responsavel1.value == ""){
-				//habilitar outro campo responsavel somente se o primeiro estiver preenchido
-				alert("Adicione um responsável")
-				return (false)
-			}*/
+			}			
 			
 			if (formulario.responsavel1.value != "" && formulario.responsavel2.value != ""){				
 				var str1 = document.getElementById('responsavel1').value;
@@ -353,7 +389,7 @@
                             <div class="form-group row" style="margin-left: 25px;">
                                 <div class="col-lg-3">
                                     <label>Data de Nascimento</label>
-                                    <input type="text" style="width: 210px;" class="form-control" id="data_nasc" name="data_nasc">
+                                    <input type="text" style="width: 210px;" class="form-control" id="data_nasc" name="data_nasc" readonly>
                                 </div>
                                 <div class="col-lg-1">
                                 	<label></label><br>

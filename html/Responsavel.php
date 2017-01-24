@@ -1,15 +1,4 @@
-<?php
-	// A sessão precisa ser iniciada em cada página diferente
-	if (!isset($_SESSION)) session_start();
-
-	// Verifica se não há a variável da sessão que identifica o usuário
-	if (!isset($_SESSION['UsuarioID'])) {
-		// Destrói a sessão por segurança
-		session_destroy();
-		// Redireciona o visitante de volta pro login
-		header("Location: Login.php"); exit;
-	}
-	
+<?php	
 	include 'index.php';
 	require '../model/Responsavel.class.php';
 	require '../dao/ResponsavelDAO.class.php';
@@ -35,64 +24,74 @@
 	}
 
 	if (isset($_GET['salvar'])){
-		$responsavel = new Responsavel();
+		$verificaCpf = $dao -> buscarPorCpf( $_POST["cpf"]);
 		
-		$responsavel -> nome = $_POST["nome"];
-		$responsavel -> cpf = $_POST["cpf"];
-		$responsavel -> email = $_POST["email"];
-		$responsavel -> telefone1 = $_POST["telefone1"];
-		$responsavel -> telefone2 = $_POST["telefone2"];
-		$responsavel -> telefone3 = $_POST["telefone3"];
+		if($verificaCpf == null){
+		
+			$responsavel = new Responsavel();
+		
+			$responsavel -> nome = $_POST["nome"];
+			$responsavel -> cpf = $_POST["cpf"];
+			$responsavel -> email = $_POST["email"];
+			$responsavel -> telefone1 = $_POST["telefone1"];
+			$responsavel -> telefone2 = $_POST["telefone2"];
+			$responsavel -> telefone3 = $_POST["telefone3"];
 
-		//Chamo a DAO e mando inserir
+			//Chamo a DAO e mando inserir
 
-		if ((!isset($_POST['id'])) || ($_POST['id'] == '')){		
-			$retorno = $dao->inserir($responsavel);
+			if ((!isset($_POST['id'])) || ($_POST['id'] == '')){		
+				$retorno = $dao->inserir($responsavel);
 			
-			if ($retorno > 0){		
-				echo "<script language='Javascript'>
-						alert('Responsável adicionado com sucesso');
-						location.href='Responsavel.php';
-					</script>";	
+				if ($retorno > 0){		
+					echo "<script language='Javascript'>
+							alert('Responsável adicionado com sucesso');
+							location.href='Responsavel.php';
+						</script>";	
+				}
+				else{
+					echo "<script language='Javascript'>
+							alert('Erro ao adicionar responsável');
+							location.href='Responsavel.php';
+						</script>";	
+				}	
 			}
-			else{
-				echo "<script language='Javascript'>
-						alert('Erro ao adicionar responsável');
-						location.href='Responsavel.php';
-					</script>";	
-			}	
-		}
 	
-		else{				
-			$responsavel -> id = $_POST["id"];	
-			$retorno = $dao->alterar($responsavel);	
+			else{				
+				$responsavel -> id = $_POST["id"];	
+				$retorno = $dao->alterar($responsavel);	
 			
-			if ($retorno > 0){		
-				echo "<script language='Javascript'>
-					alert('Responsável alterado com sucesso');
-					location.href='Responsavel.php';
-				</script>";
-			}	
-			
-			else{
-				echo "<script language='Javascript'>
-						alert('Erro ao alterar responsável');
+				if ($retorno > 0){		
+					echo "<script language='Javascript'>
+						alert('Responsável alterado com sucesso');
 						location.href='Responsavel.php';
-					</script>";	
-			}	
-		}
+					</script>";
+				}	
+			
+				else{
+					echo "<script language='Javascript'>
+							alert('Erro ao alterar responsável');
+							location.href='Responsavel.php';
+						</script>";	
+				}	
+			}
 		
-		echo '<script type="text/javascript" language="javascript">
-					$("input[name=id]").val("");
-					$("input[name=nome]").val("");
-					$("input[name=cpf").val("");
-					$("input[name=email]").val("");
-					$("input[name=telefone1]").val("");
-					$("input[name=telefone2]").val("");
-					$("input[name=telefone3]").val("");
-					$("input[name=senha]").val("");
-					$("input[name=senha1]").val("");
-				</script>';	
+			echo '<script type="text/javascript" language="javascript">
+						$("input[name=id]").val("");
+						$("input[name=nome]").val("");
+						$("input[name=cpf").val("");
+						$("input[name=email]").val("");
+						$("input[name=telefone1]").val("");
+						$("input[name=telefone2]").val("");
+						$("input[name=telefone3]").val("");
+						$("input[name=senha]").val("");
+						$("input[name=senha1]").val("");
+					</script>';	
+			}
+		else{
+			echo "<script language='Javascript'>
+					alert('CPF duplicado. Por favor, verifique e tente novamente.');
+				</script>";	
+		}
 	}
 ?>
 

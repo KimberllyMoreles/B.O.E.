@@ -1,14 +1,4 @@
 <?php
-	// A sessão precisa ser iniciada em cada página diferente
-	if (!isset($_SESSION)) session_start();
-	// Verifica se não há a variável da sessão que identifica o usuário
-	if (!isset($_SESSION['UsuarioID'])) {
-		// Destrói a sessão por segurança
-		session_destroy();
-		// Redireciona o visitante de volta pro login
-		header("Location: Login.php"); exit;
-	}
-	
 	include 'index.php';
 	require '../model/Servidor.class.php';
 	require '../dao/ServidorDAO.class.php';
@@ -32,62 +22,80 @@
 	}
 
 	if (isset($_GET['salvar'])){
-		$servidor = new Servidor();
 		
-		$servidor -> nome = $_POST["nome"];
-		$servidor -> cpf = $_POST["cpf"];
-		$servidor -> siape = $_POST["siape"];
-		$servidor -> id_categoria = $_POST["categoria"];
-		$servidor -> senha = $_POST["senha"];
+		$verificaSiape = $dao -> buscarPorSiape( $_POST["siape"]);
+		$verificaCpf = $dao -> buscarPorCpf( $_POST["cpf"]);
+		
+		if($verificaCpf == null){
+			if($verificaSiape == null){
+				$servidor = new Servidor();
+	
+				$servidor -> nome = $_POST["nome"];
+				$servidor -> cpf = $_POST["cpf"];
+				$servidor -> siape = $_POST["siape"];
+				$servidor -> id_categoria = $_POST["categoria"];			
+				$servidor -> senha = sha1(md5($_POST["senha"]));	
+				//Chamo a DAO e mando inserir
 
-		//Chamo a DAO e mando inserir
+				if ((!isset($_POST['id'])) || ($_POST['id'] == '')){			
+					$retorno = $dao->inserir($servidor);
+		
+					if ($retorno > 0){		
+						echo "<script language='Javascript'>
+								alert('Servidor adicionado com sucesso');
+								location.href='Servidor.php';
+							</script>";	
+					}
+					else{
+						echo "<script language='Javascript'>
+								alert('Erro ao adicionar servidor');
+								location.href='Servidor.php';
+							</script>";	
+					}	
+				}
 
-		if ((!isset($_POST['id'])) || ($_POST['id'] == '')){		
-			$retorno = $dao->inserir($servidor);
-			
-			if ($retorno > 0){		
-				echo "<script language='Javascript'>
-						alert('Servidor adicionado com sucesso');
-						location.href='Servidor.php';
-					</script>";	
+				else{				
+					$servidor -> id = $_POST["id"];	
+					$retorno = $dao->alterar($servidor);	
+		
+					if ($retorno > 0){		
+						echo "<script language='Javascript'>
+							alert('Servidor alterado com sucesso');
+							location.href='Servidor.php';
+						</script>";
+					}	
+		
+					else{
+						echo "<script language='Javascript'>
+								alert('Erro ao alterar servidor');
+								location.href='Servidor.php';
+							</script>";	
+					}	
+				}	
+	
+				/*echo '<script type="text/javascript" language="javascript">
+							$("input[name=id]").val('');
+							$("input[name=nome]").val('');
+							$("input[name=cpf").val('');
+							$("input[name=siape]").val('');
+							$("input[name=categoria]").val(''); 
+							$("input[name=senha]").val('');
+							$("input[name=senha1]").val('');  
+						</script>';	
+					*/
 			}
 			else{
 				echo "<script language='Javascript'>
-						alert('Erro ao adicionar servidor');
-						location.href='Servidor.php';
+						alert('Siape duplicado. Por favor, verifique e tente novamente.');
 					</script>";	
-			}	
+			}
 		}
-	
-		else{				
-			$servidor -> id = $_POST["id"];	
-			$retorno = $dao->alterar($servidor);	
-			
-			if ($retorno > 0){		
-				echo "<script language='Javascript'>
-					alert('Servidor alterado com sucesso');
-					location.href='Servidor.php';
-				</script>";
-			}	
-			
-			else{
-				echo "<script language='Javascript'>
-						alert('Erro ao alterar servidor');
-						location.href='Servidor.php';
-					</script>";	
-			}	
-		}	
+		else{
+			echo "<script language='Javascript'>
+					alert('CPF duplicado. Por favor, verifique e tente novamente.');
+				</script>";	
+		}			
 		
-		/*echo '<script type="text/javascript" language="javascript">
-					$("input[name=id]").val('');
-					$("input[name=nome]").val('');
-					$("input[name=cpf").val('');
-					$("input[name=siape]").val('');
-					$("input[name=categoria]").val(''); 
-					$("input[name=senha]").val('');
-					$("input[name=senha1]").val('');  
-				</script>';	
-			*/
 	}
 
 ?>

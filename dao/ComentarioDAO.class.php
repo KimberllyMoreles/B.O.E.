@@ -10,17 +10,13 @@ class ComentarioDAO {
         $this->pdo = $conexao->getPDO();
     }
     //Listar
-    public function listar($filtro=null,$ordenarPor=null){
-        $parametros = array();
+    public function listar(){
         $sql = "SELECT * FROM comentario WHERE status <> 2";
-        if(isset($filtro)){
-            $sql .= " AND id_comentario ilike :filtro ";
-            $parametros[":filtro"] = "%".$filtro."%";
-        }
+        
         $lista = array();
         $query = $this->pdo->prepare($sql);
         
-        $query->execute($parametros);
+        $query->execute();
         
         while ($obj = $query->fetchObject()){
             $lista[] = $obj;

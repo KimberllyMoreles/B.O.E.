@@ -1,14 +1,14 @@
 <?php
-	  // A sessão precisa ser iniciada em cada página diferente
-	  if (!isset($_SESSION)) session_start();
+	// Inicia sessões 
+	session_start(); 
+
+	// Verifica se existe os dados da sessão de login 
+	if(empty($_SESSION["UsuarioID"]) || empty($_SESSION["UsuarioNome"])){ 
+		// Usuário não logado! Redireciona para a página de login 
+		header("Location: Login.php"); 
+		exit; 
+	}
 	
-	  // Verifica se não há a variável da sessão que identifica o usuário
-	  if (!isset($_SESSION['UsuarioID'])) {
-	      // Destrói a sessão por segurança
-	      session_destroy();
-	      // Redireciona o visitante de volta pro login
-	      header("Location: Login.php"); exit;
-	  }
 	  $nomeUsuario = $_SESSION['UsuarioNome'];
 	  $idUsuario = $_SESSION['UsuarioID'];
 ?>
@@ -24,7 +24,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>SB Admin - Bootstrap Admin Template</title>
+    <title>B.O.E. - Boletim de ocorrências estudantis</title>
 
 	<script type="text/javascript" src="js/jquery-1.12.2.js"></script>
 	<script type="text/javascript" src="js/jquery-ui-1.11.4/jquery-ui.min.js"></script>
@@ -216,7 +216,7 @@
                                 <a href="CadastroOcorrencia.php"><i class="glyphicon glyphicon-minus "></i> Cadastro</a>
                             </li>
                             <li>
-                                <a href="#"><i class="glyphicon glyphicon-minus "></i> Listagem</a>
+                                <a href="ListagemOcorrencia.php"><i class="glyphicon glyphicon-minus "></i> Listagem</a>
                             </li>
                         </ul>
                     </li>

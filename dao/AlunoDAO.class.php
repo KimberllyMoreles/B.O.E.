@@ -130,6 +130,20 @@ class AlunoDAO {
         }
          
     }
+	    
+	      public function buscarPorCpf($cpf){
+		$sql=("SELECT * FROM servidor s, aluno a, responsavel r WHERE s.cpf = :cpf OR a.cpf = :cpf OR r.cpf = :cpf");
+		$retorno = $this->pdo->prepare($sql);
+		$retorno->bindParam(":cpf", $cpf);
+		$retorno->execute();
+	       
+		if($obj=$retorno->fetchObject()){
+		    return $obj;
+		}
+		else{
+		    return null;
+		}
+	    }
     
     //função que realiza a busca de alunos relacionados a determinado responsável
     public function buscarAlunoPorResponsavel($chaveprimaria)

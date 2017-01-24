@@ -12,9 +12,12 @@ class OcorrenciaDAO {
     //Listar
     public function listar($filtro=null,$ordenarPor=null){
         $parametros = array();
-        $sql = "SELECT * FROM ocorrencia WHERE status <> 2";
+        $sql = "SELECT o.data_cadastro, s.nome, o.id_tipo_ocorrencia, o.id_ocorrencia FROM ocorrencia o, servidor s WHERE s.id_servidor = o.id_autuador";
         if(isset($filtro)){
-            $sql .= " AND id_ocorrencia ilike :filtro ";
+            $sql .= " AND o.id_ocorrencia IN (SELECT oa.id_ocorrencia
+            		FROM aluno_ocorrencia oa
+            		INNER JOIN aluno a ON a.id_aluno = oa.id_aluno
+            		AND a.nome ilike :filtro) ";
             $parametros[":filtro"] = "%".$filtro."%";
         }
         $lista = array();
@@ -113,5 +116,19 @@ class OcorrenciaDAO {
          
     }
     
-    
+	public function buscarAlunoOcorrencia($id){
+		$sql = "SELECT a.nome FROM aluno a, aluno_ocorrencia ao WHERE a.id_aluno = ao.id_aluno AND ao.id_ocorrencia = :id_ocorrencia";
+
+		$lista = array();
+		
+		$retorno = $this->pdo->prepare($sql);
+		$retorno->bindParam(":id_ocorrencia",$id);
+		$retorno->execute();
+
+		 while ($obj = $retorno->fetchObject()){
+		    $lista[] = $obj;
+		}
+		
+		return $lista;
+	}    
 }

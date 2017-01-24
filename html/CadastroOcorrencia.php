@@ -1,15 +1,4 @@
-<?php 
-	// A sessão precisa ser iniciada em cada página diferente
-	if (!isset($_SESSION)) session_start();
-
-	// Verifica se não há a variável da sessão que identifica o usuário
-	if (!isset($_SESSION['UsuarioID'])) {
-		// Destrói a sessão por segurança
-		session_destroy();
-		// Redireciona o visitante de volta pro login
-		header("Location: Login.php"); exit;
-	}
-	
+<?php 	
 	include "index.php";
 	
 	require '../model/Ocorrencia.class.php';
@@ -49,6 +38,7 @@
 		return $alunos;
 	}
 	
+	
 	if (isset($_GET['salvar'])){
 		$ocorrencia = new Ocorrencia();
 		$dao = new OcorrenciaDAO();
@@ -59,9 +49,15 @@
 		$id_tipo_ocorrencia = $_POST["id_tipo_ocorrencia"];
 		*/
 		$ocorrencia -> data_cadastro = $_POST["data_cadastro"];
-		$ocorrencia -> id_solicitante = $_POST["id_solicitante"];
 		$ocorrencia -> id_autuador = $_POST["id_autuador"];
 		$ocorrencia -> id_tipo_ocorrencia = $_POST["id_tipo_ocorrencia"];
+		
+		if ((isset($_POST['id_solicitante'])) && ($_POST['id_solicitante'] != '')){
+			$ocorrencia -> id_solicitante = $_POST["id_solicitante"];					
+		}
+		else{
+			$ocorrencia -> id_solicitante = null;	
+		}		
 		
 		$id_aluno = $_POST['id_aluno'];
 		
@@ -86,8 +82,15 @@
 		
 			$data_cadastro = date('d/m/Y', strtotime($dados_ocorrencia -> data_cadastro));
 			$id_tipo_ocorrencia = $dados_ocorrencia -> id_tipo_ocorrencia;
-			$solicitante = $dados_ocorrencia -> solicitante;
-			$id_solicitante = $dados_ocorrencia -> id_solicitante;
+			
+			if($dados_ocorrencia -> solicitante != null && $dados_ocorrencia -> id_solicitante != null){
+				$solicitante = $dados_ocorrencia -> solicitante;
+				$id_solicitante = $dados_ocorrencia -> id_solicitante;
+			}
+			else{
+				$solicitante = "";
+				$id_solicitante = "";
+			}
 			
 			if ($alunos > 0){
 				echo '<script type="text/javascript" language="javascript">
@@ -110,17 +113,22 @@
 			
 			$dados_ocorrencia = buscaOcorrencia($id_ocorrencia);
 			$alunos = buscaAlunoOcorrencia($id_ocorrencia);
-		
+			
 			$data_cadastro = date('d/m/Y', strtotime($dados_ocorrencia -> data_cadastro));
 			$id_tipo_ocorrencia = $dados_ocorrencia -> id_tipo_ocorrencia;
 			$solicitante = $dados_ocorrencia -> solicitante;
 			$id_solicitante = $dados_ocorrencia -> id_solicitante;
 			
-			echo '<script type="text/javascript" language="javascript">
-				  		$("#tipo_comentario1").attr("disabled", false);
-				  		$("#tipo_comentario2").attr("disabled", false);
-				  		$("#comentario").attr("disabled", false);
-				  </script>';	
+			if ($alunos > 0){
+				echo '<script type="text/javascript" language="javascript">
+					  		$(document).ready(function() {	 
+					  			$("#tipo_comentario1").attr("disabled", false);
+						  		$("#tipo_comentario2").attr("disabled", false);
+						  		$("#comentario").attr("disabled", false);
+							});
+					  </script>';
+			}	
+				
 		}
 					
 	}
@@ -167,6 +175,28 @@
 		}			
 	}
 	
+	
+	if(isset($_GET['editar'])){
+		$id_ocorrencia = $_GET['idListaOcorrencia'];
+		$dados_ocorrencia = buscaOcorrencia($id_ocorrencia);
+		$alunos = buscaAlunoOcorrencia($id_ocorrencia);
+		
+			$data_cadastro = date('d/m/Y', strtotime($dados_ocorrencia -> data_cadastro));
+			$id_tipo_ocorrencia = $dados_ocorrencia -> id_tipo_ocorrencia;
+			$solicitante = $dados_ocorrencia -> solicitante;
+			$id_solicitante = $dados_ocorrencia -> id_solicitante;
+			
+			if ($alunos > 0){
+				echo '<script type="text/javascript" language="javascript">
+					  		$(document).ready(function() {	 
+					  			$("#tipo_comentario1").attr("disabled", false);
+						  		$("#tipo_comentario2").attr("disabled", false);
+						  		$("#comentario").attr("disabled", false);
+							});
+					  </script>';
+			}	
+	}
+	
 	//campo selecionado no select do tipo de ocorrencia
 	function selected( $value, $selected ){
 		return $value==$selected ? ' selected="selected"' : '';
@@ -204,6 +234,28 @@
 		
 			});
 			*/
+			
+			function excluirAluno(idAluno, idOcorrencia){
+				if ($(idAluno).val() != "") {
+					var r=confirm("Alterar o registro selecionado?");
+					if (r==false) {
+						return false;
+					}
+				}
+				
+				$.ajax({
+					type: 'POST',
+					dataType: 'json',
+					url: 'cadastroOcorrencia_excluirAluno.php',
+					async: true,
+					data: { id: idAluno},
+					success: function(response) {
+						alert(response);
+					}
+				});				
+				
+			}
+			
 			function validaOcorrencia(){			
 				if (formulario.data_cadastro.value == ""){
 					alert("Digite a data")
@@ -212,6 +264,16 @@
 			
 				if (formulario.id_tipo_ocorrencia.value == ""){
 					alert("Informe o tipo de ocorrencia")
+					return (false)
+				}
+				
+				if (formulario.aluno.value == ""){
+					alert("Informe um aluno")
+					return (false)
+				}
+				
+				if (formulario.id_aluno.value == ""){
+					alert("Houve um erro ao inserir aluno. Por favor, insira o nome do aluno novamente")
 					return (false)
 				}
 																			
@@ -270,7 +332,7 @@
 	                    </div>
 	                    <div class="col-lg-2">
 	                        <label>Data de cadastro</label>
-	                        <input id="data_cadastro" name='data_cadastro' value='<?php echo $data_cadastro;?>' style="width: 150px;" class="form-control" placeholder="28/09/2016" maxlength="14" >
+	                        <input id="data_cadastro" name='data_cadastro' value='<?php echo $data_cadastro;?>' style="width: 150px;" class="form-control" placeholder="28/09/2016" maxlength="14" readonly>
 	                    </div>
 	                    <div class="col-lg-3">
 	                    	<label>Tipo de Ocorrência</label>
@@ -317,7 +379,7 @@
 									$nome = $obj -> nome;
 									
 									echo "
-										<span value=$id class='label label-primary'> $nome </span>
+										<span value=$id class='label label-primary' onClick='excluirAluno($id, $id_ocorrencia);'> $nome </span>
 									";
 	                   			}
 	                   		}
@@ -330,7 +392,7 @@
                     <div class="form-group row" style="margin-left: 15px;">
                     <input  type="hidden" id="id_comentario" name="id_comentario" />
                     <input  type="hidden" id="id_ocorrencia" name="id_ocorrencia" value='<?php echo $id_ocorrencia; ?>' />
-                    <input type="hidden" name="id_usuario"  id="id_usuario" value='<?php echo $id_solicitante;?>' />
+                    <input type="hidden" name="id_usuario"  id="id_usuario" value='<?php echo $idUsuario;?>' />
                     	<div class="col-lg-4">
                     		<label>Intera&ccedil;ão</label>
                             <div class='row' style="margin-left: 0px;">
