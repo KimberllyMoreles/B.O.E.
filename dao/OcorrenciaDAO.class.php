@@ -88,18 +88,19 @@ class OcorrenciaDAO {
     
    public function buscarChavePrimaria($chaveprimaria)
     {
-        $sql = "SELECT 
-        			o.id_ocorrencia,
-        			o.data_cadastro,
-        			o.id_tipo_ocorrencia,
-        			o.id_solicitante,
-        			s.nome AS solicitante
-        		FROM 
-        			ocorrencia o, servidor s
-        		WHERE 
-        			o.id_ocorrencia = :id_ocorrencia
-        		AND 
-        			o.id_solicitante = s.id_servidor";
+        $sql = "
+        SELECT 
+			o.id_ocorrencia,
+			o.data_cadastro,
+			o.id_tipo_ocorrencia,
+			o.id_solicitante,
+			s.nome AS solicitante
+		FROM 
+			ocorrencia o
+		LEFT JOIN servidor s
+			ON o.id_solicitante = s.id_servidor
+		WHERE 
+			o.id_ocorrencia = :id_ocorrencia";
 			
         $retorno = $this->pdo->prepare($sql);
         $retorno->bindParam(":id_ocorrencia",$chaveprimaria);

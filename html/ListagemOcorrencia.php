@@ -6,11 +6,11 @@
 	$dao = new OcorrenciaDAO();
 		
 	if(isset($_POST["txtFiltro"])){
-        	$lista = $dao->listar($_POST["txtFiltro"]); 
-     	}     	
-     	else{
-        	$lista = $dao->listar(); 
-     	}
+    	$lista = $dao->listar($_POST["txtFiltro"]); 
+ 	}     	
+ 	else{
+    	$lista = $dao->listar(); 
+ 	}
 ?>
 
 <div id="page-wrapper">

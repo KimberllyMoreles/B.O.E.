@@ -10,7 +10,6 @@
 	require '../model/Comentario.class.php';
 	require '../dao/ComentarioDAO.class.php';
 	
-		
 	function inserirAluno_Ocorrencia($id_ocorrencia, $id_aluno){			
 		$aluno_ocorrencia = new Aluno_Ocorrencia();
 		$dao_aluno_ocorrencia = new Aluno_OcorrenciaDAO();
@@ -160,9 +159,12 @@
 		
 		//Chamo a DAO e mando inserir
 		if ((!isset($_POST['id_comentario'])) || ($_POST['id_comentario'] == '')){			
-			$retorno = $dao->inserir($comentario);	
-			
-			
+			$retorno = $dao->inserir($comentario);				
+			echo "
+				<script language='Javascript'>
+					location.href='ListagemOcorrencia.php';
+				</script>
+			";
 //		$dadosOcorrencia = $dao -> buscarChavePrimaria($_POST["id"]);
 		}
 
@@ -194,7 +196,11 @@
 						  		$("#comentario").attr("disabled", false);
 							});
 					  </script>';
-			}	
+			}			
+			
+		$daoComentario = new ComentarioDAO();
+		$listaComentario = $daoComentario->listar($id_ocorrencia); 
+		
 	}
 	
 	//campo selecionado no select do tipo de ocorrencia
@@ -419,18 +425,30 @@
                                 </tr>
                             </thead>
                             <tbody>
+                            	<?php
+                            	if (isset($listaComentario)){
+                            		if($listaComentario != 0){
+										foreach($listaComentario as $obj){
+											$usuario = $obj -> nome;
+											$comentario = $obj -> comentario;
+											
+											echo "
+												<tr>
+													<td>$usuario</td>
+													<td>$comentario</td>
+												</tr>
+											";
+										}
+									}
+                            	}
+                            	
+                            	else{
+                            echo"	
                               	<tr>
-                                    <td>Uncompleted Profile</td>
-                                    <td>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</td>
-                                </tr>
-                                <tr>
-                                    <td>Uncompleted Profile</td>
-                                    <td>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</td>
-                                </tr>
-                                <tr>
-                                    <td>Uncompleted Profile</td>
-                                    <td>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</td>
-                                </tr>
+                                    <td>Usuário</td>
+                                    <td>Nenhum comentário ou interação registrado.</td>
+                                </tr>";
+                                }?>                                
                             </tbody>
                         </table>
                     </div>

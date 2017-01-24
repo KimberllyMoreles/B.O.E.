@@ -10,8 +10,10 @@ class ComentarioDAO {
         $this->pdo = $conexao->getPDO();
     }
     //Listar
-    public function listar(){
-        $sql = "SELECT * FROM comentario WHERE status <> 2";
+    public function listar($chaveprimaria){
+        $sql = "
+SELECT s.nome, c.comentario FROM servidor s, comentario c
+WHERE c.id_ocorrencia = $chaveprimaria AND s.id_servidor = c.id_usuario;";
         
         $lista = array();
         $query = $this->pdo->prepare($sql);
