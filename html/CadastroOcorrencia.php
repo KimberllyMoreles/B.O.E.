@@ -324,25 +324,29 @@
 				
 			}
 			
-			
-			
-			
+			$('#myModal').on('shown.bs.modal', function () {
+			  $('#myInput').focus()
+			})	
 	</script>
 
-		<div>
+		<div id="page-wrapper">
 			<div class="container-fluid">
 				<!-- Page Heading -->
                 <div class="row">
                     <div class="col-lg-12">
-                        <h1>
+                        <h1 class="page-header">
                             Cadastro de ocorrência
                         </h1>
                     </div>
-                    <div class="col-lg-12" style="background-color: #BEBEBE; padding: 10px;">
-                    	<button class="glyphicon glyphicon-check btn btn-primary" style="background-color: #00CD00; margin-left:30px"> Solicitar encaminhamento </button>
-        				<button class="glyphicon glyphicon-check btn btn-primary" style="background-color: #00CD00; margin-left:15px"> Notificar responsáveis</button>
-                    </div>
-                </div><br><br>
+				</div>
+				 <div class="row" style="margin-bottom: 20px;">
+					<div class="col-lg-12">
+						<div class="col-lg-12">
+							<button class="glyphicon glyphicon-check btn btn-success"> Solicitar encaminhamento </button>
+							<button class="glyphicon glyphicon-check btn btn-success"> Notificar responsáveis</button>
+						</div>
+					</div>
+				</div>
                 <form role="form" action="CadastroOcorrencia.php?salvar=true" method="POST" name='formulario' onSubmit="return validaOcorrencia()">
                 	<div class="form-group row" style="margin-left: 15px;">
 	                    <div class="col-lg-1">
@@ -385,11 +389,11 @@
 	                    </div>
 	                    <div class="col-lg-3">
 	                        <button class="glyphicon glyphicon-plus btn btn-primary" style="margin-top:23px"  ></button>
-</div>
+						</div>
                     </div>
                     <div class="form-group row" style="margin-left: 15px;">
-                    	<div class="col-lg-3">
-	                        <label id="alunos" name="alunos">Alunos envolvidos: <br></label>
+                    	<div class="col-lg-12">
+	                        <label id="alunos" name="alunos">Alunos envolvidos: </label><br/>
 	                   <?php
 	                   if(isset($alunos)){
 	                   		if($alunos != 0){
@@ -398,7 +402,7 @@
 									$nome = $obj -> nome;
 									
 									echo "
-										<span value=$id class='label label-primary'> $nome <span style='cursor:pointer' onClick='excluirAluno($id, $id_ocorrencia);'> X </span></span>
+										<span value=$id class='label label-primary'> $nome </span><span style='cursor:pointer' onClick='excluirAluno($id, $id_ocorrencia);' class='label label-danger'><i class='glyphicon glyphicon-remove'></i></span>
 									";
 	                   			}
 	                   		}
@@ -412,60 +416,71 @@
                     <input  type="hidden" id="id_comentario" name="id_comentario" />
                     <input  type="hidden" id="id_ocorrencia" name="id_ocorrencia" value='<?php echo $id_ocorrencia; ?>' />
                     <input type="hidden" name="id_usuario"  id="id_usuario" value='<?php echo $idUsuario;?>' />
-                    	<div class="col-lg-4">
-                    		<label>Intera&ccedil;ão</label>
-                            <div class='row' style="margin-left: 0px;">
-                                <input type='radio' name='tipo_comentario' id='tipo_comentario1' value='1' disabled="disabled" >
-                                <label for='publico'>Público</label>
-                                <input type='radio' name='tipo_comentario' id='tipo_comentario2' value='0' disabled="disabled" >
-                                <label for='privado'>Privado</label>
-                            </div>
-                    		<textarea rows="6" cols="140" style="border-radius:10px" id="comentario" name="comentario" placeholder="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum." disabled="disabled" ></textarea>
-	                    </div><br>
-                    </div>
-                    <div class="form-group row col-lg-12" style="margin-left: 15px;">
-	                    <button class="glyphicon glyphicon-check btn btn-primary pull-right" style="margin-right: 60px"> Salvar</button>
-                    </div>
-                </form>
+					<div class="col-lg-12">
+						<label>Intera&ccedil;ão</label>
+						<div class='row' style="margin-left: 0px;">
+							<input type='radio' name='tipo_comentario' id='tipo_comentario1' value='1' disabled="disabled" >
+							<label for='publico'>Público</label>
+							<input type='radio' name='tipo_comentario' id='tipo_comentario2' value='0' disabled="disabled" >
+							<label for='privado'>Privado</label>
+						</div>                            
+					</div>
+					<div class="row" style="margin-top: 10px">
+						 <div class="col-lg-12">
+							<div class="form-group">
+								<div class="col-lg-12">
+									<textarea rows="6" id="comentario" name="comentario" disabled="disabled" class="form-control"></textarea>
+								</div>
+							</div>
+						</div>
+					</div>
+                    <div class="row" style="margin: 10px;">
+						 <div class="col-lg-12">
+							<div class="form-group pull-right">
+								<button class="glyphicon glyphicon-check btn btn-primary pull-right"> Salvar</button>
+							</div>  
+						</div>
+					</div>      
+                </form>                
 				<div class="panel-body">
-                    <div>
-                        <table class="table table-hover fundotable">
-                            <thead>
-                            	<tr></tr>
-                                <tr style="background-color: #CDCDCD;">
-                                    <th style="width:210px">Usuário</th>
-                                    <th>Mensagem</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                            	<?php
-                            	if (isset($listaComentario)){
-                            		if($listaComentario != 0){
-										foreach($listaComentario as $obj){
-											$usuario = $obj -> nome;
-											$comentario = $obj -> comentario;
-											
-											echo "
-												<tr>
-													<td>$usuario</td>
-													<td>$comentario</td>
-												</tr>
-											";
-										}
+					<table class="table table-hover fundotable">
+						<thead>
+							<tr></tr>
+							<tr style="background-color: #CDCDCD;">
+								<th style="width:210px">Usuário</th>
+								<th>Mensagem</th>
+							</tr>
+						</thead>
+						<tbody>
+							<?php
+							if (isset($listaComentario)){
+								if($listaComentario != 0){
+									foreach($listaComentario as $obj){
+										$usuario = $obj -> nome;
+										$comentario = $obj -> comentario;
+										
+										echo "
+											<tr>
+												<td>$usuario</td>
+												<td>$comentario</td>
+											</tr>
+										";
 									}
-                            	}
-                            	
-                            	else{
-                            echo"	
-                              	<tr>
-                                    <td>Usuário</td>
-                                    <td>Nenhum comentário ou interação registrado.</td>
-                                </tr>";
-                                }?>                                
-                            </tbody>
-                        </table>
-                    </div>
-                    <!-- /.table-responsive -->
-                </div>                
+								}
+							}
+							
+							else{
+						echo"	
+							<tr>
+								<td>Usuário</td>
+								<td>Nenhum comentário ou interação registrado.</td>
+							</tr>";
+							}?>                                
+						</tbody>
+					</table>
+					<!-- /.table-responsive -->
+				</div> 						              
 			</div>
 		</div>
+	</body>
+</html>

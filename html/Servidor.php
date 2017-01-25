@@ -188,7 +188,7 @@
 				}
 			}						
 			formulario.submit();
-		}		
+		}	
 	</script>
 
         <div id="page-wrapper">
@@ -201,29 +201,20 @@
                         </h1>
                     </div>
                 </div>
-                <div class="row">
+                <div class="row" style="margin-bottom: 20px;">
                     <div class="col-lg-12">
                         <div class="col-lg-6">
                             <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">
                                 <i class="glyphicon glyphicon-check"></i> Novo cadastro</button>
                         </div>
                         <div class="col-lg-6">
-                            <div class="col-lg-offset-6">
-                                <div class="form-group input-group row">
-			        <form method="post">
-                                    <input type="text" class="form-control" name="txtFiltro">
-                                    <span class="input-group-btn">
-                                    <button class="btn btn-default" type="submit" onClick='filtro();' ><i class="glyphicon glyphicon-search"></i></button></span>
-                                </form>
-                               	<!--<form method="post">
-                                    <input type="text" class="form-control">
-                                        <span class="input-group-btn">
-                                       		<button class="btn btn-default" onClick='filtro()' type="button"><i class="fa fa-search"></i>
-                                            </button>
-                                        </span>
-                                 </form>-->
-                                </div>
-                            </div>
+							<div class="input-group pull-right">
+							 <form method="post">
+								<input type="text" class="form-control" name="txtFiltro" style="width: 80%;" placeholder="Nome do servidor">
+								<span class="input-group-btn">
+								<button class="btn btn-default pull-right" type="submit" onClick='filtro();' style="margin-left: -20px;" ><i class="glyphicon glyphicon-search"></i></button></span>
+							</form>
+							</div>
                         </div>
                     </div>
                 </div>
@@ -296,76 +287,73 @@
             <!-- Modal -->
 
             <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
-                <div class="modal-dialog modal-lg">
+                <div class="modal-dialog">
                     <div class="modal-content">
-                        <h2><p style="text-align: center; font-weight: bold;">Cadastro de Servidor</p></h2>
-                         <form role="form" action="Servidor.php?salvar=true" method="POST" name='formulario' onSubmit="return valida()">
-                           <input type="hidden" id="id" name="id">
-                            <div class="form-group row" style="margin-left: 25px;">
-                                <div class="col-lg-6">
-                                    <label>Nome</label>
-                                    <input type="text" style="width: 350px;" class="form-control" placeholder="Fulano de tal" id="nome" name="nome">
-                                </div>
-                                <div class="col-lg-4">
-                                    <label>CPF</label>
-                                    <input style="width: 250px;" class="form-control" placeholder="12312312312" id="cpf" name="cpf">
-                                </div>
-                            </div>
-                            <!--<div class="form-group row" style="margin-left: 25px;">
-                                <div class="col-lg-5">
-                                    <label>Siape</label>
-                                    <input style="width: 305px;" class="form-control" placeholder="1234567890987654321" id="siape" name="siape">
-                                </div>
-                                <div class="col-lg-5" style="margin-left:20px">
-                                    <label>Categoria</label>
-                                    <select name='categoria'>
-										<option value="">Selecione a categoria: </option>
-										<option value="1">Assistente de Alunos</option>
-										<option value="2">Assistente Social</option>
-										<option value="3">Orientador(a) Educacional</option>
-										<option value="4">Supervisor(a) Pedagógico(a)</option>						
-										<option value="5">Professor(a)</option>					
-										<option value="6">Psicólogo(a)</option>
-								    </select> 
-                                </div>
-                            </div>-->
-							<div class="form-group row" style="margin-left: 25px;">
-                                <div class="col-lg-5">
-                                    <label>Siape</label>
-                                    <input style="width: 210px;" class="form-control" placeholder="1234567" id="siape" name="siape" onkeypress='return SomenteNumero(event)'>
-                                </div>
-                                <div class="col-lg-4" style="margin-left: 70px">
-                                    <label>Categoria</label>
-                                    <select name='categoria'>
-										<option value="">Selecione a categoria: </option>
-										<option value="1">Assistente de Alunos</option>
-										<option value="2">Assistente Social</option>
-										<option value="3">Orientador(a) Educacional</option>
-										<option value="4">Supervisor(a) Pedagógico(a)</option>						
-										<option value="5">Professor(a)</option>					
-										<option value="6">Psicólogo(a)</option
-										>
-								    </select> 
-                                </div>
-                            </div>
-                            <div class="form-group row">
-                                <div class="col-lg-4" style="margin-left:40px">
-                                    <label>Senha</label>
-                                    <input type="password" style="width: 210px;" class="form-control" placeholder="********" id="senha" name="senha">
-                                </div>
-                                <div class="col-lg-4" style="margin-left:10px">
-                                    <label>Repetir senha</label>
-                                    <input type="password" style="width: 210px;" class="form-control" placeholder="********" id="senha1" name="senha1">
-                                </div>
-                            </div>
-                            <div style="margin-left: 80%; margin-bottom: 25px;">
-                                <button type="submit" class="glyphicon glyphicon-check botao1 btn btn-primary" name="inserir" data-toggle="modal" data-target=".bd-example-modal-lg" id="salvar"> Salvar</button>
-                            </div>
-                            
-                        </form>
-                        </div>
-                    </div>
-                </div>   
-    </div> <!-- div aberta na index.php -->
-</body>
+						<h2><p style="text-align: center; font-weight: bold;">Cadastro de Servidor</p></h2>
+						<form role="form" action="Servidor.php?salvar=true" method="POST" name='formulario' onSubmit="return valida()">
+                        <input type="hidden" id="id" name="id">
+						<div class="row" style="margin-bottom: 20px;">
+							<div class="col-lg-12">
+								<div class="form-group">
+									<div class="col-lg-8">
+										<label>Nome</label>
+										<input type="text" class="form-control" placeholder="Nome do servidor" id="nome" name="nome">
+									</div>
+									<div class="col-lg-4">
+										<label>CPF</label>
+										<input class="form-control" placeholder="000.000.000-00" id="cpf" name="cpf">
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="row" style="margin-bottom: 20px;">
+							<div class="col-lg-12">
+								<div class="form-group">
+									<div class="col-lg-4">
+										<label>Siape</label>
+										<input class="form-control" placeholder="1234567" id="siape" name="siape" onkeypress='return SomenteNumero(event)'>
+									</div>
+									<div class="col-lg-8">
+										<label>Categoria</label>
+										<select name='categoria' class="form-control">
+											<option value="">Selecione a categoria: </option>
+											<option value="1">Assistente de Alunos</option>
+											<option value="2">Assistente Social</option>
+											<option value="3">Orientador(a) Educacional</option>
+											<option value="4">Supervisor(a) Pedagógico(a)</option>						
+											<option value="5">Professor(a)</option>					
+											<option value="6">Psicólogo(a)</option
+											>
+										</select> 
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="row" style="margin-bottom: 20px;">
+							<div class="col-lg-12">
+								<div class="form-group">
+									<div class="col-lg-6">
+										<label>Senha</label>
+										<input type="password" class="form-control" placeholder="********" id="senha" name="senha">
+									</div>
+									<div class="col-lg-6">
+										<label>Repetir senha</label>
+										<input type="password" class="form-control" placeholder="********" id="senha1" name="senha1">
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="row" style="margin: 10px;">
+							 <div class="col-lg-12">
+								<div class="form-group pull-right">
+									<button type="submit" class="glyphicon glyphicon-check btn btn-primary" name="inserir" id='salvar'> Salvar</button>
+								</div>  
+							</div>
+						</div>                              
+					</form>
+					</div>
+				</div>
+			</div>   
+		</div> <!-- div aberta na index.php -->
+	</body>
 </html>

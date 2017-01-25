@@ -279,22 +279,20 @@
                         </h1>
                     </div>
                 </div>
-                <div class="row">
+                <div class="row" style="margin-bottom: 20px;">
                     <div class="col-lg-12">
                         <div class="col-lg-6">
                             <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal" onClick='cleanForm();'>
                                 <i class="glyphicon glyphicon-check"></i> Novo cadastro</button>
                         </div>
                         <div class="col-lg-6">
-                            <div class="col-lg-offset-6">
-                                <div class="form-group input-group">
-                                <form method="post">
-                                    <input type="text" class="form-control" name="txtFiltro">
-                                    <span class="input-group-btn">
-                                    <button class="btn btn-default" type="submit" onClick='filtro();' ><i class="glyphicon glyphicon-search"></i></button></span>
-                                </form>
-                                </div>
-                            </div>
+							<div class="input-group pull-right">
+							 <form method="post">
+								<input type="text" class="form-control" name="txtFiltro" style="width: 80%;" placeholder="Nome do aluno">
+								<span class="input-group-btn">
+								<button class="btn btn-default pull-right" type="submit" onClick='filtro();' style="margin-left: -20px;" ><i class="glyphicon glyphicon-search"></i></button></span>
+							</form>
+							</div>
                         </div>
                     </div>
                 </div>
@@ -372,78 +370,98 @@
                        <h2><p style="text-align: center; font-weight: bold;">Cadastro de Alunos</p></h2>
                          <form role="form" action="Aluno.php?salvar=true" method="POST" name='formulario' onSubmit="return valida()">
                              <input type="hidden" id="id" name="id">
-                             <div class="form-group row" style="margin-left: 25px;">
-                                <div class="col-lg-3">
-                                    <label>Nome</label>
-                                    <input type="text" style="width: 210px;" class="form-control" placeholder="Fulano de Tal" id="nome" name="nome">
-                                </div>
-                                <div class="col-lg-3" style="margin-left:20px">
-                                    <label>CPF</label>
-                                    <input style="width: 210px;" class="form-control" placeholder="12312312312" id="cpf" name="cpf">
-                                </div>
-                                <div class="col-lg-2" style="margin-left:20px">
-                                    <label>Matrícula</label>
-                                    <input style="width: 210px;" class="form-control" placeholder="1234567890987654321" id="matricula" name="matricula">
-                                </div>
+                             <div class="row">
+								 <div class="col-lg-12">
+									 <div class="form-group">
+										<div class="col-lg-4">
+											<label>Nome</label>
+											<input type="text" class="form-control" placeholder="Nome do aluno" id="nome" name="nome">
+										</div>
+										<div class="col-lg-4">
+											<label>CPF</label>
+											<input class="form-control" placeholder="000.000.000-00" id="cpf" name="cpf">
+										</div>
+										<div class="col-lg-4">
+											<label>Matrícula</label>
+											<input class="form-control" placeholder="123456789" id="matricula" name="matricula">
+										</div>
+									</div>
+								</div>
                             </div>
-                            <div class="form-group row" style="margin-left: 25px;">
-                                <div class="col-lg-3">
-                                    <label>Data de Nascimento</label>
-                                    <input type="text" style="width: 210px;" class="form-control" id="data_nasc" name="data_nasc" readonly>
-                                </div>
-                                <div class="col-lg-1">
-                                	<label></label><br>
-                                	<input type="reset" id="bt_inicio" name="bt_inicio" value=" ... " style="margin-top: 10px">
+                            <div class="row" style="margin-top: 10px">								
+								 <div class="col-lg-12">
+									<div class="form-group">
+										<div class="col-lg-3">
+											<label>Data de Nascimento</label>
+											<input type="text" class="form-control" id="data_nasc" name="data_nasc" placeholder="dd/mm/aaaa" readonly>
+										</div>
+										<div class="col-lg-1">
+											<label></label><br>
+											<button type="button" id="bt_inicio" name="bt_inicio" style="margin-top: 3px" class="btn glyphicon glyphicon-calendar" />
 
-									<script type="text/javascript">
-										Calendar.setup({
-											inputField	 :	"data_nasc",
-											ifFormat	   :	"%d/%m/%Y",
-											showsTime	  :	true,
-											button		 :	"bt_inicio",
-											singleClick	:	true,
-											step		   :	1,
-											disableFunc: function(date) {
-												var now= new Date();
-												return (date.getTime() > now.getTime());
-											}
-										});
-									</script>		
-                                </div>                                
-                                <div class="col-lg-3" style="margin-left:5px">
-                                    <!-- Tratar autocomplete-->
-                                    <label>Responsavel 1</label>
-                                    <input style="width: 210px;" class="form-control" id="responsavel1" name="responsavel1">
-                                    <input name="id_responsavel1" type="hidden" id="id_responsavel1" value="" size="20"  />
-                                </div>
-                                <div class="col-lg-3" style="margin-left:20px">
-                                     <label>Responsavel 2</label>
-                                     <input style="width: 210px;" class="form-control" id="responsavel2" name="responsavel2">
-                                     <input name="id_responsavel2" type="hidden" id="id_responsavel2" value="" size="20"  />
-                                </div>
+											<script type="text/javascript">
+												Calendar.setup({
+													inputField	 :	"data_nasc",
+													ifFormat	   :	"%d/%m/%Y",
+													showsTime	  :	true,
+													button		 :	"bt_inicio",
+													singleClick	:	true,
+													step		   :	1,
+													disableFunc: function(date) {
+														var now= new Date();
+														return (date.getTime() > now.getTime());
+													}
+												});
+											</script>		
+										</div> 
+										<div class="col-lg-6">
+											<label>Curso</label>
+											<select name='curso' class="form-control">
+												<option value="">Selecione o curso: </option>
+												<option value="1">Técnico em Agropecuária</option>
+												<option value="2">Técnico em Agroindustria</option>
+												<option value="3">Técnico em Informática</option>
+												<option value="4">Técnico em Informática para Internet</option>						
+												<option value="5">TADS</option>
+											</select> 
+										</div>
+									</div>
+								</div>
                             </div>
-                        	<div class="form-group row" style="margin-left: 25px;">
-	                        	<div class="col-lg-4">
-		                            <label>Curso</label>
-									<select name='curso'>
-										<option value="">Selecione o curso: </option>
-										<option value="1">Técnico em Agropecuária</option>
-										<option value="2">Técnico em Agroindustria</option>
-										<option value="3">Técnico em Informática</option>
-										<option value="4">Técnico em Informática para Internet</option>						
-										<option value="5">TADS</option>
-									</select> 
-		                        </div>
+                            <div class="row" style="margin-top: 10px">
+								 <div class="col-lg-12">
+									<div class="form-group">										                               
+										<div class="col-lg-4">
+											<!-- Tratar autocomplete-->
+											<label>Responsavel 1</label>
+											<input class="form-control" id="responsavel1" name="responsavel1" placeholder="Nome do primeiro responsavel">
+											<input name="id_responsavel1" type="hidden" id="id_responsavel1" value="" size="20"  />
+										</div>
+										<div class="col-lg-4">
+											 <label>Responsavel 2</label>
+											 <input class="form-control" id="responsavel2" name="responsavel2" placeholder="Nome do segundo responsavel">
+											 <input name="id_responsavel2" type="hidden" id="id_responsavel2" value="" size="20"  />
+										</div>
+									</div>
+								</div>
                             </div>
-                            <div class="form-group row" style="margin-left: 15px;">
-		                    	<div class="col-lg-4">
-		                    		<label>Observação</label>
-		                    		<textarea rows="6" cols="110" style="border-radius:10px" id='observacao' name='observacao' placeholder="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."></textarea>
-			                    </div><br>
-		                    </div>
-                            <div style="margin-left: 80%; margin-bottom: 25px;">
-                                <button type="submit" class="glyphicon glyphicon-check botao1 btn btn-primary" name="inserir" data-toggle="modal" data-target=".bd-example-modal-lg" id='salvar'> Salvar</button>
-                            </div>                          
+                            <div class="row" style="margin-top: 10px">
+								 <div class="col-lg-12">
+									<div class="form-group">
+										<div class="col-lg-12">
+											<label>Observação</label>
+											<textarea rows="6" id='observacao' name='observacao' class="form-control"></textarea>
+										</div>
+									</div>
+								</div>
+                            </div>
+                            <div class="row" style="margin: 10px;">
+								 <div class="col-lg-12">
+									<div class="form-group pull-right">
+										<button type="submit" class="glyphicon glyphicon-check btn btn-primary" name="inserir" id='salvar'> Salvar</button>
+									</div>  
+								</div>
+                            </div>                        
                         </form>     
                     </div>
                 </div>

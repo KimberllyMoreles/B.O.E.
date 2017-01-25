@@ -6,13 +6,11 @@
 	$dao = new ResponsavelDAO();
 		
 	if(isset($_POST["txtFiltro"])){
-        	$lista = $dao->listar($_POST["txtFiltro"]); 
-     	}     	
-     	else{
-        	$lista = $dao->listar(); 
-     	}
-     	
-     	
+		$lista = $dao->listar($_POST["txtFiltro"]); 
+	}     	
+	else{
+		$lista = $dao->listar(); 
+	}     	
      	
 	if (isset($_GET['acao'])=='excluir'){
 		$dao = new ResponsavelDAO();
@@ -54,8 +52,7 @@
 							location.href='Responsavel.php';
 						</script>";	
 				}	
-			}
-	
+			}	
 			else{				
 				$responsavel -> id = $_POST["id"];	
 				$retorno = $dao->alterar($responsavel);	
@@ -159,7 +156,7 @@
 					success: function(response) {
 						for(var i=0; i < response.length; i++){						
 							//Adicionando registros retornados no label									
-							$('#filhos').append('<span class="label label-primary">' + response[i].nome + '</span>');							
+							$('#filhos').append('<span class="label label-primary" style="margin-left:10px;">' + response[i].nome + '</span>');							
 						}
 					}
 				});				
@@ -211,22 +208,20 @@
                         </h1>
                     </div>
                 </div>               
-                <div class="row">
+                <div class="row" style="margin-bottom: 20px;">
                     <div class="col-lg-12">
                         <div class="col-lg-6">
                             <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">
                                 <i class="glyphicon glyphicon-check"></i> Novo cadastro</button>
                         </div>
                         <div class="col-lg-6">
-                            <div class="col-lg-offset-6">
-                                <div class="form-group input-group">
-                               	 <form method="post">
-                                    <input type="text" class="form-control" name="txtFiltro">
-                                    <span class="input-group-btn">
-                                    <button class="btn btn-default" type="submit" onClick='filtro();' ><i class="glyphicon glyphicon-search"></i></button></span>
-                                </form>
-                                </div>
-                            </div>
+							<div class="input-group pull-right">
+							 <form method="post">
+								<input type="text" class="form-control" name="txtFiltro" style="width: 80%;" placeholder="Nome do responsavel">
+								<span class="input-group-btn">
+								<button class="btn btn-default pull-right" type="submit" onClick='filtro();' style="margin-left: -20px;" ><i class="glyphicon glyphicon-search"></i></button></span>
+							</form>
+							</div>
                         </div>
                     </div>
                 </div>
@@ -303,42 +298,57 @@
                     <div class="modal-content">
                         <h2><p style="text-align: center; font-weight: bold;">Cadastro de Responsável</p></h2>
                         <form role="form" action="Responsavel.php?salvar=true" method="POST" name='formulario' onSubmit="return valida()">
-			    <input type="hidden" id="id" name="id">
-                            <div class="form-group row" style="margin-left: 25px;">
-                                <div class="col-lg-6">
-                                    <label>Nome</label>
-                                    <input type="text" style="width: 350px;" class="form-control" placeholder="Fulano de tal" id="nome" name="nome">
-                                </div>
-                                <div class="col-lg-4">
-                                    <label>CPF</label>
-                                    <input style="width: 250px;" class="form-control" placeholder="12312312312" id="cpf" name="cpf">
-                                </div>
+							<input type="hidden" id="id" name="id">
+							 <div class="row" style="margin-bottom: 20px;">
+								<div class="col-lg-12">
+									<div class="form-group">
+										<div class="col-lg-4">
+											<label>Nome</label>
+											<input type="text" class="form-control" placeholder="Fulano de tal" id="nome" name="nome">
+										</div>
+										<div class="col-lg-3">
+											<label>CPF</label>
+											<input class="form-control" placeholder="12312312312" id="cpf" name="cpf">
+										</div>
+										<div class="col-lg-5">
+											<label>Email</label>
+											<input type="email" class="form-control" placeholder="example@mail.com" id="email" name="email">
+										</div>
+									</div>
+								</div>
+							</div>							
+							<div class="row" style="margin-bottom: 20px;">
+								<div class="col-lg-12">
+									<div class="form-group">
+										<div class="col-lg-3">
+											<label>Telefone</label>
+											<input class="form-control" placeholder="(53)99999-9999" id="telefone1" name="telefone1" onkeypress='return SomenteNumero(event)'>
+										</div>
+										<div class="col-lg-3">
+											<label>Telefone 2</label>
+											<input class="form-control" placeholder="(53)99999-9999" id="telefone2" name="telefone2" onkeypress='return SomenteNumero(event)'>
+										</div>
+										<div class="col-lg-3">
+											<label>Telefone 3</label>
+											<input type="text" class="form-control" placeholder="(53)99999-9999" id="telefone3" name="telefone3" onkeypress='return SomenteNumero(event)'>
+										</div>
+									</div>
+								</div>
+							</div>
+                            <div class="row" style="margin-left: 10px;">
+								 <div class="col-lg-12">
+									 <div class="form-group">
+											<label id="filhos" name="filhos">Filhos(as):</label>
+										</div>
+								</div>
                             </div>
-                            <div class="form-group" style="width: 350px; margin-left: 40px;">
-                                <label>Email</label>
-                                <input type="email" class="form-control" placeholder="example@mail.com" id="email" name="email">
-                            </div>
-                            <div class="form-group row" style="margin-left: 25px;">
-                                <div class="col-lg-3">
-                                    <label>Telefone</label>
-                                    <input style="width: 210px;" class="form-control" placeholder="5312341234" id="telefone1" name="telefone1" onkeypress='return SomenteNumero(event)'>
-                                </div>
-                                <div class="col-lg-3" style="margin-left:20px">
-                                    <label>Telefone 2</label>
-                                    <input style="width: 210px;" class="form-control" placeholder="5312341234" id="telefone2" name="telefone2" onkeypress='return SomenteNumero(event)'>
-                                </div>
-                                <div class="col-lg-2" style="margin-left:20px">
-                                    <label>Telefone 3</label>
-                                    <input type="text" style="width: 210px;" class="form-control" placeholder="5312341234" id="telefone3" name="telefone3" onkeypress='return SomenteNumero(event)'>
-                                </div>
-                            </div>
-                            <div>
-                                <label style="margin-left: 40px;" id="filhos" name="filhos">Filhos(as):</label>
-                            </div>
-                            <div style="margin-left: 80%; margin-bottom: 25px;">
-                                <button type="submit" class="glyphicon glyphicon-check botao1 btn btn-primary" name="inserir" data-toggle="modal" data-target=".bd-example-modal-lg" id="salvar"> Salvar</button>
-                            </div>
-                            
+                            <div class="row" style="margin: 10px;">
+								 <div class="col-lg-12">
+									<div class="form-group pull-right">
+										<button type="submit" class="glyphicon glyphicon-check btn btn-primary" name="inserir" id='salvar'> Salvar</button>
+									</div>  
+								</div>
+                            </div>                              
                         </form>
                     </div>
                 </div>
