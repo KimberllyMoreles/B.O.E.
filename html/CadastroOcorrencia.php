@@ -242,8 +242,11 @@
 			*/
 			
 			function excluirAluno(idAluno, idOcorrencia){
-				if ($(idAluno).val() != "") {
-					var r=confirm("Alterar o registro selecionado?");
+				alert("Entrou no onClick excluirAluno.");
+				alert(idAluno);
+				alert(idOcorrencia);
+				if (idAluno != "") {
+					var r=confirm("Excluir aluno selecionado da ocorrência?");
 					if (r==false) {
 						return false;
 					}
@@ -254,11 +257,21 @@
 					dataType: 'json',
 					url: 'cadastroOcorrencia_excluirAluno.php',
 					async: true,
-					data: { id: idAluno},
+					data: { idAluno: idAluno, idOcorrencia: idOcorrencia},
 					success: function(response) {
-						alert(response);
+						/*if(response == 1){
+							alert("Aluno excluído da ocorrência com sucesso.");
+						}
+						else{
+							if(response == 0){
+								alert("Impossível excluir. Há apenas um aluno na ocorrência.");
+							}
+							else(response == 2){
+								alert("Ocorreu um erro inesperado. Por favor, tente novamente mais tarde.");
+							}
+						}*/
 					}
-				});				
+				});			
 				
 			}
 			
@@ -385,7 +398,7 @@
 									$nome = $obj -> nome;
 									
 									echo "
-										<span value=$id class='label label-primary' onClick='excluirAluno($id, $id_ocorrencia);'> $nome </span>
+										<span value=$id class='label label-primary'> $nome <span style='cursor:pointer' onClick='excluirAluno($id, $id_ocorrencia);'> X </span></span>
 									";
 	                   			}
 	                   		}

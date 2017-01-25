@@ -1,23 +1,25 @@
 <?php
-	require '../dao/AlunoOcorrenciaDAO.class.php';
+	require '../dao/Aluno_OcorrenciaDAO.class.php';
 	
-	$dao = new AlunoOcorrenciaDAO();
+	$dao = new Aluno_OcorrenciaDAO();
 	$idAluno = $_POST['idAluno'];	
 	$idOcorrencia = $_POST['idOcorrencia'];
 	$retorno = "";
 	
-	if ((isset($_POST['id'])) && ($_POST['id'] != '')) {
-		if($dao -> buscarAluno($idAluno, $idOcorrencia) > 1){
+	if ((isset($_POST['idAluno'])) && ($_POST['idAluno'] != '')&&(isset($_POST['idOcorrencia'])) && ($_POST['idOcorrencia'] != '')) {
+		$testeAlunos = $dao -> buscarAluno($idOcorrencia);
+		echo $testeAlunos;
+		if($testeAlunos > 1){
 			$retorno1 = $dao -> excluir($idAluno, $idOcorrencia);
-			$retorno = "Aluno excluído com sucesso da ocorrência";
+			$retorno = 1;
 		}
 		else{
-			$retorno = "Impossível excluir. Há apenas um aluno na ocorrência.";
+			$retorno = 0;
 		}
 	}
 
 	else{
-		$retorno ="Erro";
+		$retorno = 2;
 	}
 	echo json_encode($retorno);
  

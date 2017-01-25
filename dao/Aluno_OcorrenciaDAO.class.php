@@ -46,10 +46,8 @@ class Aluno_OcorrenciaDAO {
     }
     
     public function excluir($idAluno, $idOcorrencia) {
-        $sql = "UPDATE 
+        $sql = "DELETE FROM 
         			aluno_ocorrencia 
-        	    SET 
-        	    	status = 2
         	    WHERE 
         	    	id_aluno = $idAluno
         	    AND 
@@ -106,15 +104,18 @@ class Aluno_OcorrenciaDAO {
          
     }
     
-    public function buscarAluno($idAluno, $idOcorrencia){
+    public function buscarAluno($idOcorrencia){
         $sql = "SELECT 
-        			ao.id_aluno
+        			ao.id_aluno, 
+        			a.nome 
         		FROM 
-        			aluno_ocorrencia ao
+        			aluno_ocorrencia ao, aluno a 
         		WHERE 
+        			a.status <> 2
+        		AND
         			ao.id_ocorrencia = $idOcorrencia
         		AND 
-        			ao.id_aluno = $idAluno";
+        			ao.id_aluno = a.id_aluno";
 		
 		$alunos = array();
         $retorno = $this->pdo->prepare($sql);
