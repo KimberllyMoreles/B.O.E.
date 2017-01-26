@@ -12,7 +12,7 @@ class ComentarioDAO {
     //Listar
     public function listar($chaveprimaria){
         $sql = "
-SELECT s.nome, c.comentario FROM servidor s, comentario c
+SELECT s.nome, c.comentario, c.data_cadastro FROM servidor s, comentario c
 WHERE c.id_ocorrencia = $chaveprimaria AND s.id_servidor = c.id_usuario;";
         
         $lista = array();

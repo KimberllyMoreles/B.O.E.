@@ -3,6 +3,9 @@
 	require '../model/Ocorrencia.class.php';
 	require '../dao/OcorrenciaDAO.class.php';
 	
+	require '../model/Comentario.class.php';
+	require '../dao/ComentarioDAO.class.php';
+	
 	$dao = new OcorrenciaDAO();
 		
 	if(isset($_POST["txtFiltro"])){
@@ -12,7 +15,45 @@
     	$lista = $dao->listar(); 
  	}
 ?>
-	<script type="text/javascript" language="javascript">		
+	<script type="text/javascript" language="javascript">	
+		
+		function fillForm(valor){
+			if (valor != null) {
+				$.ajax({
+					type: 'POST',
+					dataType: 'json',
+					url: 'cadastroOcorrencia_busca.php',
+					async: true,
+					data: { id: valor},
+					success: function(response) {
+						//Adicionando registros retornados na tabela									
+						$('#tab_ocorrencia').append('<tr><td>'+
+							response[i].data_cadastro+'</td><td>'+
+							response[i].nome+'</td><td>'+
+							response[i].solicitante+'</td></tr>');
+						
+					}
+				});
+				$.ajax({
+					type: 'POST',
+					dataType: 'json',
+					url: 'listagemOcorrencia_comentarioBusca.php',
+					async: true,
+					data: { id: valor},
+					success: function(response) {
+						for(var i=0; i < response.length; i++){						
+							//Adicionando registros retornados na tabela									
+							$('#tab_comentario').append('<tr><td>'+
+								response[i].nome+'</td><td>'+
+								response[i].data_cadastro+'</td><td>'+
+								response[i].comentario+'</td></tr>');
+						}
+					}
+				});				
+			}
+		}	
+	</script>
+	<script type="text/javascript" language="javascript">	
 		('#myModal').on('shown.bs.modal', function () {
 			  $('#myInput').focus()
 			})	
@@ -107,7 +148,7 @@
 								echo"</td>	                             
 										<td>
 											<div class=''>
-												<a type='button' class='btn btn-info' name='Historico' href='' data-toggle='modal' data-target='#myModal'> <i class='glyphicon glyphicon-search'></i> Histórico</a>
+												<a type='button' class='btn btn-info' name='Historico' data-toggle='modal' data-target='#myModal' onClick='fillForm($id)' rel='modal'> <i class='glyphicon glyphicon-search' ></i> Histórico</a>												
 												&nbsp&nbsp&nbsp
 											   ";?> <a type='button' class='btn btn-success' name='editar' title='Editar' href="CadastroOcorrencia.php?editar=true&&idListaOcorrencia=<?php echo  $id?>">
 													<i class='glyphicon glyphicon-edit'></i> Editar</a>&nbsp&nbsp&nbsp <a type='button' class='btn btn-danger' name='Deletar' href="ListagemOcorrencia.php?acao='excluir'&&id=<?php echo  $id?>"> 
@@ -151,7 +192,30 @@
 						<div class="modal-header">
 							<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
 						</div>
-						<div class="modal-body">
+						<div class="modal-body">		
+						<table class="table table-striped table-bordered table-hover" id="example">				
+							<thead>
+								<tr>
+									<th>Data</th>
+									<th>Responsável</th>
+									<th>Tipo de Ocorrência</th>									
+									<th>Solicitante</th>
+									<!--<th class="col-lg-2">Aluno(s) envolvido(s)</th>-->
+									
+								</tr>
+							</thead>
+							<tbody id="tab_ocorrencia" name="tab_ocorrencia"></tbody>
+						</table>
+							<table class="table table-striped table-bordered table-hover" id="example">
+								<thead>
+									<tr>
+										<th>Alunos envolvidos: </th>
+										<th></th>
+									</tr>
+								</thead>
+								<tbody id="tab_alunos" name="tab_alunos"></tbody>
+							</table>
+						</table>
 							<table class="table table-striped table-bordered table-hover" id="example">
 								<thead>
 									<tr>
@@ -160,13 +224,7 @@
 										<th class="col-span-8">Mensagem</th>
 									</tr>
 								</thead>
-								<tbody>                 
-									<tr>
-										<th>Boo</th>
-										<td>17/10/2016</td> 
-										<td>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</td>    
-									</tr>
-								</tbody>
+								<tbody id="tab_comentario" name="tab_comentario"></tbody>
 							</table>
 						</div><!-- /.modal-content -->
 					</div><!-- /.modal-dialog -->
