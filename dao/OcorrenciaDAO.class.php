@@ -92,13 +92,16 @@ class OcorrenciaDAO {
         SELECT 
 			o.id_ocorrencia,
 			o.data_cadastro,
+			s1.nome AS responsavel,
 			o.id_tipo_ocorrencia,
 			o.id_solicitante,
-			s.nome AS solicitante
+			s2.nome AS solicitante
 		FROM 
 			ocorrencia o
-		LEFT JOIN servidor s
-			ON o.id_solicitante = s.id_servidor
+		LEFT JOIN servidor s1
+			ON o.id_autuador = s1.id_servidor
+		LEFT JOIN servidor s2
+			ON o.id_solicitante = s2.id_servidor
 		WHERE 
 			o.id_ocorrencia = :id_ocorrencia";
 			

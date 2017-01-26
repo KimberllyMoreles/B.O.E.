@@ -17,7 +17,10 @@
 ?>
 	<script type="text/javascript" language="javascript">	
 		
-		function fillForm(valor){
+		function fillForm(valor){			
+			$('#tab_ocorrencia').empty();	
+			$('#tab_alunos').empty();	
+			$('#tab_comentario').empty();	
 			if (valor != null) {
 				$.ajax({
 					type: 'POST',
@@ -26,12 +29,62 @@
 					async: true,
 					data: { id: valor},
 					success: function(response) {
-						//Adicionando registros retornados na tabela									
-						$('#tab_ocorrencia').append('<tr><td>'+
-							response[i].data_cadastro+'</td><td>'+
-							response[i].nome+'</td><td>'+
-							response[i].solicitante+'</td></tr>');
+						//Adicionando registros retornados na tabela		
+						var tipo_ocorrencia;
+						var solicitante;			
 						
+						switch (response.id_tipo_ocorrencia){
+							case 1:
+								tipo_ocorrencia = "Diálogo com turma";
+								break;
+							case 2:
+								tipo_ocorrencia = "Diálogo com aluno";
+								break;
+							case 3:
+								tipo_ocorrencia = "Diálogo com responsável";
+								break;
+							case 4:
+								tipo_ocorrencia = "Diálogo com professor";
+								break;
+							case 5:
+								tipo_ocorrencia = "Ocorrência";
+								break;
+						}	
+						
+						if(response.solicitante == null){
+							solicitante = " - ";
+						}	
+						else{
+							solicitante = response.solicitante;
+						}	
+						
+						var date = new Date(response.data_cadastro);
+						var day = date.getDate();
+						var monthIndex = date.getMonth() + 1;
+						var year = date.getFullYear();
+						
+						var dataF = day + '/' + monthIndex + '/' + year;						
+						
+						$("#titulo").text(tipo_ocorrencia);				
+						$('#tab_ocorrencia').append('<tr><td>'+
+							dataF+'</td><td>'+
+							response.responsavel+'</td><td>'+
+							solicitante+'</td></tr>');
+						
+					}
+				});
+				$.ajax({
+					type: 'POST',
+					dataType: 'json',
+					url: 'listagemOcorrencia_alunoBusca.php',
+					async: true,
+					data: { id: valor},
+					success: function(response) {
+						//Adicionando registros retornados na tabela	
+						for(var i=0; i < response.length; i++){									
+							$('#tab_alunos').append('<tr><td></td><td>'+
+								response[i].nome+'</td></tr>');
+						}
 					}
 				});
 				$.ajax({
@@ -42,10 +95,17 @@
 					data: { id: valor},
 					success: function(response) {
 						for(var i=0; i < response.length; i++){						
-							//Adicionando registros retornados na tabela									
+							//Adicionando registros retornados na tabela	
+							var date = new Date(response[i].data_cadastro);
+							var day = date.getDate();
+							var monthIndex = date.getMonth() + 1;
+							var year = date.getFullYear();
+						
+							var dataF = day + '/' + monthIndex + '/' + year;	
+																		
 							$('#tab_comentario').append('<tr><td>'+
 								response[i].nome+'</td><td>'+
-								response[i].data_cadastro+'</td><td>'+
+								dataF+'</td><td>'+
 								response[i].comentario+'</td></tr>');
 						}
 					}
@@ -186,19 +246,19 @@
 					</div>
 					<!-- /.panel-body -->
 				</div>
-				<div class="modal fade" tabindex="-1" role="dialog" id="myModal">
+				<div class="modal fade" tabindex="-1" role="dialog" id="myModal printable"">
 				  <div class="modal-dialog modal-lg" role="document">
 					<div class="modal-content">
 						<div class="modal-header">
-							<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+							<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>							
+							<label id="titulo" name="titulo" ></label>
 						</div>
 						<div class="modal-body">		
 						<table class="table table-striped table-bordered table-hover" id="example">				
 							<thead>
 								<tr>
 									<th>Data</th>
-									<th>Responsável</th>
-									<th>Tipo de Ocorrência</th>									
+									<th>Responsável</th>								
 									<th>Solicitante</th>
 									<!--<th class="col-lg-2">Aluno(s) envolvido(s)</th>-->
 									
