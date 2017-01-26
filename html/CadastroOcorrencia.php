@@ -17,8 +17,7 @@
 		$aluno_ocorrencia -> id_ocorrencia = $id_ocorrencia;
 		$aluno_ocorrencia -> id_aluno = $id_aluno;
 		
-		$retorno = $dao_aluno_ocorrencia->inserir($aluno_ocorrencia);
-						
+		$retorno = $dao_aluno_ocorrencia->inserir($aluno_ocorrencia);						
 	}
 	
 	function buscaOcorrencia($id_ocorrencia){
@@ -242,9 +241,6 @@
 			*/
 			
 			function excluirAluno(idAluno, idOcorrencia){
-				alert("Entrou no onClick excluirAluno.");
-				alert(idAluno);
-				alert(idOcorrencia);
 				if (idAluno != "") {
 					var r=confirm("Excluir aluno selecionado da ocorrência?");
 					if (r==false) {
@@ -259,17 +255,13 @@
 					async: true,
 					data: { idAluno: idAluno, idOcorrencia: idOcorrencia},
 					success: function(response) {
-						/*if(response == 1){
-							alert("Aluno excluído da ocorrência com sucesso.");
+						if(response == 1){							
+							alert("O aluno foi excluído da ocorrência com sucesso");
+							location.href='CadastroOcorrencia.php?editar=true&&idListaOcorrencia=' + idOcorrencia;
 						}
 						else{
-							if(response == 0){
-								alert("Impossível excluir. Há apenas um aluno na ocorrência.");
-							}
-							else(response == 2){
-								alert("Ocorreu um erro inesperado. Por favor, tente novamente mais tarde.");
-							}
-						}*/
+							alert("Erro ao excluir aluno da ocorrência.");							
+						}
 					}
 				});			
 				

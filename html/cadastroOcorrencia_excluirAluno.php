@@ -6,20 +6,12 @@
 	$idOcorrencia = $_POST['idOcorrencia'];
 	$retorno = "";
 	
-	if ((isset($_POST['idAluno'])) && ($_POST['idAluno'] != '')&&(isset($_POST['idOcorrencia'])) && ($_POST['idOcorrencia'] != '')) {
-		$testeAlunos = $dao -> buscarAluno($idOcorrencia);
-		echo $testeAlunos;
-		if($testeAlunos > 1){
-			$retorno1 = $dao -> excluir($idAluno, $idOcorrencia);
-			$retorno = 1;
-		}
-		else{
-			$retorno = 0;
-		}
+	if ((isset($_POST['idAluno'])) && ($_POST['idAluno'] != '')&&(isset($_POST['idOcorrencia'])) && ($_POST['idOcorrencia'] != '')&&($dao -> buscarAluno($idOcorrencia) > 1)) {
+		$retorno = $dao -> excluir($idAluno, $idOcorrencia);		
 	}
 
 	else{
-		$retorno = 2;
+		$retorno = array("success" => false);
 	}
 	echo json_encode($retorno);
  

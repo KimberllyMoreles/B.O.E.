@@ -29,8 +29,7 @@ class Aluno_OcorrenciaDAO {
         return $lista;
     }
     
-    public function inserir($obj)
-    {
+    public function inserir($obj){
         //Monta os parâmetros
         $parametros = array(
 		    ':id_aluno' => $obj->id_aluno,
@@ -47,7 +46,7 @@ class Aluno_OcorrenciaDAO {
     
     public function excluir($idAluno, $idOcorrencia) {
         $sql = "DELETE FROM 
-        			aluno_ocorrencia 
+        		aluno_ocorrencia 
         	    WHERE 
         	    	id_aluno = $idAluno
         	    AND 
