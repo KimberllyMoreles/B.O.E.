@@ -118,6 +118,22 @@
 			  $('#myInput').focus()
 			})	
 	</script>
+	<style>
+	@media print{
+		body * {
+			visibility: hidden;
+		}
+		.printable, .printable * {
+			visibility: visible;
+		}
+		.printable{
+			position: fixed;
+			font-size: 12px;
+			left: 0;
+			top: 0;
+		}
+	}
+	</style>
 		<div id="page-wrapper">
             <div class="container-fluid">
                 <!-- Page Heading -->
@@ -246,7 +262,7 @@
 					</div>
 					<!-- /.panel-body -->
 				</div>
-				<div class="modal fade" tabindex="-1" role="dialog" id="myModal printable"">
+				<div class="modal fade printable" tabindex="-1" role="dialog" id="myModal">
 				  <div class="modal-dialog modal-lg" role="document">
 					<div class="modal-content">
 						<div class="modal-header">
